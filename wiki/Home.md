@@ -30,6 +30,7 @@ It works with **Jira**, **GitHub**, **GitLab** and **Linear**, and with any othe
 
 ## Get help or ask for something
 
-- **Something not working?** Check [[Troubleshooting]], then [report a bug](https://github.com/rejochandran/issue-jump/issues/new?template=bug.yml).
+- **Something not working?** Check [[Troubleshooting]], then [report it](https://github.com/rejochandran/issue-jump/issues/new/choose).
+- **Something wrong on these pages?** [Report a documentation problem](https://github.com/rejochandran/issue-jump/issues/new?template=docs.yml).
 - **Have an idea, or want another tracker?** [Post it in Ideas](https://github.com/rejochandran/issue-jump/discussions/new?category=ideas) or [upvote existing ones](https://github.com/rejochandran/issue-jump/discussions/categories/ideas?discussions_q=category%3AIdeas+sort%3Atop).
 - **Have a question?** [Ask in Q&A](https://github.com/rejochandran/issue-jump/discussions/new?category=q-a).

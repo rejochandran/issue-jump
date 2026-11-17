@@ -10,7 +10,7 @@
 
 ## Checklist
 
-- [ ] This pull request targets `dev`
+- [ ] This pull request comes from a feature branch or fork and targets `dev`
 - [ ] `npm run test:all` passes (unit tests, popup tests, checks)
 - [ ] Tests added or updated: unit tests for logic, a case in `tests/ui/cases.js` for anything visible
 - [ ] `CHANGELOG.md` has a line under "Unreleased" for anything users will notice

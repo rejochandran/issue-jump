@@ -4,7 +4,7 @@ Thanks for taking the time. Bug reports, ideas and pull requests are all welcome
 
 ## Ways to help
 
-- **Report a bug** with the [bug form](https://github.com/rejochandran/issue-jump/issues/new?template=bug.yml).
+- **Report a problem** with one of the [issue forms](https://github.com/rejochandran/issue-jump/issues/new/choose): a bug, a problem with one tracker, or a mistake in the documentation.
 - **Suggest a feature or request a tracker** in [Discussions › Ideas](https://github.com/rejochandran/issue-jump/discussions/categories/ideas).
 - **Vote.** Upvote the [ideas](https://github.com/rejochandran/issue-jump/discussions/categories/ideas?discussions_q=category%3AIdeas+sort%3Atop) you care about. Votes decide what gets built next. An idea that is accepted becomes an issue, which is where the work is tracked.
 - **Pick up an issue.** Ones labelled [`good first issue`](https://github.com/rejochandran/issue-jump/labels/good%20first%20issue) are a good start. Comment on it first so two people don't do the same work.
@@ -18,10 +18,10 @@ For anything larger than a small fix, start an idea in Discussions or comment on
 You need Chrome (or another Chromium browser) and Node 20 or newer. There are no dependencies to install.
 
 ```bash
-git clone https://github.com/rejochandran/issue-jump.git
+git clone https://github.com/rejochandran/issue-jump.git   # or your fork
 cd issue-jump
-git checkout dev
-npm test
+git checkout -b fix/short-description dev
+npm run test:all
 ```
 
 Load it in Chrome: open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked** and choose the `extension/` folder. After changing code, click the reload icon on the extension's card.
@@ -30,14 +30,19 @@ For UI work, `npm run preview` serves the popup at `http://localhost:8765/` with
 
 ## Branches
 
-| Branch | Purpose |
-|---|---|
-| `dev` | Default branch. All pull requests target it. Every push produces a dev build. |
-| `main` | Released code only. It changes only through a release pull request from `dev`, with CI green; direct pushes are refused for everyone. A merge publishes to the Chrome Web Store. |
+Nothing is pushed straight to `dev` or `main`. Every change arrives through a pull request, and CI must pass before it can be merged. This applies to maintainers too.
 
-1. Fork the repository and create a branch from `dev`: `git checkout -b fix/short-description dev`.
-2. Make your change.
-3. Open a pull request against `dev`.
+| Branch | Purpose | How it changes |
+|---|---|---|
+| your feature branch or fork | Where you work | Push freely |
+| `dev` | Default branch. Collects finished changes. Every merge produces a dev build. | Pull request from a feature branch or a fork, squash-merged |
+| `main` | Released code only. A merge publishes to the Chrome Web Store. | Release pull request from `dev`, merged with a merge commit |
+
+1. **Outside contributors:** fork the repository. **Maintainers:** create a branch in the repository.
+2. Branch from `dev` and name it for what it does: `feat/gitlab-search`, `fix/blank-tab-detection`, `docs/linear-setup`, `chore/update-actions`.
+3. Make your change, with tests and documentation.
+4. Open a pull request against `dev` and fill in the template.
+5. When both checks are green and review is done, it is squash-merged and the branch is deleted.
 
 ## Before you open a pull request
 

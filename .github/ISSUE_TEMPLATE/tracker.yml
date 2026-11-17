@@ -1,0 +1,74 @@
+name: Tracker problem
+description: A tracker isn't detected, connects wrongly, or its previews and search don't work
+labels: [bug, tracker]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this when the problem is with one tracker: Jira, GitHub, GitLab, Linear or a custom one.
+        To ask for a tracker that isn't supported yet, post in [Ideas](https://github.com/rejochandran/issue-jump/discussions/new?category=ideas) instead.
+        Please leave out company names, private issue titles and API keys.
+  - type: dropdown
+    id: tracker
+    attributes:
+      label: Which tracker?
+      options:
+        - Jira Cloud
+        - Jira Server / Data Center
+        - GitHub
+        - GitLab.com
+        - GitLab self-hosted
+        - Linear
+        - Custom tracker
+    validations:
+      required: true
+  - type: dropdown
+    id: problem
+    attributes:
+      label: What goes wrong?
+      multiple: true
+      options:
+        - It wasn't found automatically
+        - It can't be added, or the form refuses my details
+        - Issues open at the wrong address
+        - A key or number goes to the wrong tracker
+        - No titles or statuses appear
+        - Search finds nothing
+        - Assigned to me is empty or missing
+        - It says I'm signed out when I'm not
+        - My API key or token isn't accepted
+    validations:
+      required: true
+  - type: input
+    id: state
+    attributes:
+      label: What does the tracker's row in Settings say?
+      description: The short text at the right of the row.
+      placeholder: "Signed in, Public only, Allow access, Sign in, Add API key, Links only..."
+    validations:
+      required: true
+  - type: input
+    id: link
+    attributes:
+      label: What does an issue link look like there?
+      description: Replace private names with placeholders. This matters most for self-hosted and custom trackers.
+      placeholder: "https://tracker.example.com/browse/ABC-123"
+  - type: textarea
+    id: details
+    attributes:
+      label: What did you do, and what did you see?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Issue Jump version and browser
+      placeholder: "1.2.1, Chrome 142 on macOS 15"
+    validations:
+      required: true
+  - type: textarea
+    id: console
+    attributes:
+      label: Errors from the console
+      description: Right-click the popup, choose Inspect, open the Console tab and paste anything in red. Remove private names first.
+      render: text

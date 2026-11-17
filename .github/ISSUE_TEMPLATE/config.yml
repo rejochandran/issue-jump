@@ -6,6 +6,9 @@ contact_links:
   - name: Ask a question
     url: https://github.com/rejochandran/issue-jump/discussions/new?category=q-a
     about: Not sure how something works, or whether it's a bug? Ask here.
+  - name: Read the documentation
+    url: https://github.com/rejochandran/issue-jump/wiki
+    about: Setup guides for every tracker, settings and troubleshooting.
   - name: Security problem
     url: https://github.com/rejochandran/issue-jump/security/advisories/new
     about: Please report security issues privately, not in a public issue.
