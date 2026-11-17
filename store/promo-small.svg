@@ -3,6 +3,6 @@
   <rect width="440" height="280" fill="url(#bg)"/>
   <svg x="90.0" y="-84.0" width="448.0" height="448.0" viewBox="0 0 128 128" opacity=".09"><path d="M8 12h30l38 52-38 52H8l38-52z" fill="#fff"/><path d="M52 12h30l38 52-38 52H52l38-52z" fill="#fff"/></svg>
   <svg x="44" y="92" width="96" height="96" viewBox="0 0 128 128"><path d="M8 12h30l38 52-38 52H8l38-52z" fill="#fff" fill-opacity=".7"/><path d="M52 12h30l38 52-38 52H52l38-52z" fill="#fff"/></svg>
-  <text x="164" y="138" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="44" font-weight="700" fill="#fff" letter-spacing="-1.2">Jira Jump</text>
+  <text x="164" y="138" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="44" font-weight="700" fill="#fff" letter-spacing="-1.2">Issue Jump</text>
   <text x="165" y="170" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="18" fill="#fff" fill-opacity=".85">Any issue, one keystroke.</text>
 </svg>

@@ -1,14 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "Jira Jump",
-  "short_name": "Jira Jump",
+  "name": "Issue Jump",
+  "short_name": "Issue Jump",
   "version": "1.0.0",
   "description": "Open any Jira issue in one keystroke. Type or paste a key, a number, a link or a few words and jump straight to it.",
-  "homepage_url": "https://github.com/rejochandran/jira-jump",
+  "homepage_url": "https://github.com/rejochandran/issue-jump",
   "minimum_chrome_version": "116",
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Jira Jump",
+    "default_title": "Issue Jump",
     "default_icon": {
       "16": "icons/icon16.png",
       "32": "icons/icon32.png",
@@ -30,7 +30,7 @@
   "commands": {
     "_execute_action": {
       "suggested_key": { "default": "Alt+J" },
-      "description": "Open Jira Jump"
+      "description": "Open Issue Jump"
     }
   },
   "permissions": ["tabs", "storage", "contextMenus"],

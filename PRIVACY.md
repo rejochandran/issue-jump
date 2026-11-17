@@ -2,11 +2,11 @@
 
 _Last updated: 17 November 2026_
 
-Jira Jump is a browser extension that opens Jira issues. It is built to work without collecting anything.
+Issue Jump is a browser extension that opens Jira issues. It is built to work without collecting anything.
 
 ## What is collected
 
-Nothing. Jira Jump has no server, no analytics, no advertising and no account. The author never receives any information about you or how you use the extension.
+Nothing. Issue Jump has no server, no analytics, no advertising and no account. The author never receives any information about you or how you use the extension.
 
 ## What is stored on your device
 
@@ -17,7 +17,7 @@ You can clear recent issues in the extension's settings. Removing the extension 
 
 ## What is sent over the network
 
-When previews and search are on, Jira Jump asks **your own Jira site** for issue titles, statuses, search results, your open issues and your display name. These requests go straight from your browser to the Jira address you configured, using the Jira login already in your browser. Jira Jump never sees or stores your password or session.
+When previews and search are on, Issue Jump asks **your own Jira site** for issue titles, statuses, search results, your open issues and your display name. These requests go straight from your browser to the Jira address you configured, using the Jira login already in your browser. Issue Jump never sees or stores your password or session.
 
 No request is ever made to any other server. You can turn previews and search off in settings, after which the extension makes no network requests at all.
 
@@ -38,4 +38,4 @@ Changes to this policy are recorded in this file's history and in the [changelog
 
 ## Contact
 
-Questions or concerns: [open an issue](https://github.com/rejochandran/jira-jump/issues).
+Questions or concerns: [open an issue](https://github.com/rejochandran/issue-jump/issues).

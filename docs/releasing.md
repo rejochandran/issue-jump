@@ -7,7 +7,7 @@
 | Event | Workflow | Result |
 |---|---|---|
 | Pull request to `dev` or `main` | `ci.yml` | Tests and checks run. |
-| Push to `dev` | `dev-build.yml` | A dev build named "Jira Jump (dev)" is attached to the workflow run and to the rolling [`dev-latest`](https://github.com/rejochandran/jira-jump/releases/tag/dev-latest) pre-release. It installs next to the store version. |
+| Push to `dev` | `dev-build.yml` | A dev build named "Issue Jump (dev)" is attached to the workflow run and to the rolling [`dev-latest`](https://github.com/rejochandran/issue-jump/releases/tag/dev-latest) pre-release. It installs next to the store version. |
 | Push to `main` | `release.yml` | If the manifest version has no tag yet: tests, build, a `vX.Y.Z` tag and GitHub release with the zip, then upload and publish to the Chrome Web Store. |
 
 If `main` is pushed without a version bump, the release workflow does nothing.
@@ -28,7 +28,7 @@ The first version has to be uploaded by hand, because the store only issues an e
 
 1. Register at the [Chrome Web Store developer dashboard](https://chrome.google.com/webstore/devconsole) (one-time US$5 fee).
 2. Create a new item and upload the zip from the latest GitHub release.
-3. Fill in the listing using [`store/listing.md`](../store/listing.md) and the images in `store/`. Set the privacy policy URL to `https://github.com/rejochandran/jira-jump/blob/main/PRIVACY.md`.
+3. Fill in the listing using [`store/listing.md`](../store/listing.md) and the images in `store/`. Set the privacy policy URL to `https://github.com/rejochandran/issue-jump/blob/main/PRIVACY.md`.
 4. Submit for review. Copy the **item ID** from the dashboard URL.
 
 Then give the workflow access to the store API:

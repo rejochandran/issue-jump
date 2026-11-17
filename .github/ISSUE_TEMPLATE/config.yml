@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
   - name: Security problem
-    url: https://github.com/rejochandran/jira-jump/security/advisories/new
+    url: https://github.com/rejochandran/issue-jump/security/advisories/new
     about: Please report security issues privately, not in a public issue.

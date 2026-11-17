@@ -3,7 +3,7 @@ import {
   getHistory, sortHistory, issueUrl, searchUrl,
 } from './lib/jira.js';
 
-const MENU_ID = 'jira-jump-selection';
+const MENU_ID = 'issue-jump-selection';
 const HINT = 'Open a Jira issue: type a key like <match>ABC-123</match>, a number, or a few words';
 
 chrome.runtime.onInstalled.addListener(async () => {

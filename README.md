@@ -1,12 +1,12 @@
-# Jira Jump
+# Issue Jump
 
-[![CI](https://github.com/rejochandran/jira-jump/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/rejochandran/jira-jump/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/rejochandran/jira-jump)](https://github.com/rejochandran/jira-jump/releases/latest)
+[![CI](https://github.com/rejochandran/issue-jump/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/rejochandran/issue-jump/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/rejochandran/issue-jump)](https://github.com/rejochandran/issue-jump/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 A Chrome extension that opens any Jira issue in one keystroke. Press `Alt+J`, type `123`, hit Enter.
 
-![The Jira Jump popup showing recent issues](store/screenshots/1-recent.png)
+![The Issue Jump popup showing recent issues](store/screenshots/1-recent.png)
 
 ## What it does
 
@@ -19,7 +19,7 @@ A Chrome extension that opens any Jira issue in one keystroke. Press `Alt+J`, ty
 - **Works from the address bar** (`j`, space, then a key) and from the right-click menu on selected text.
 - **Sets itself up.** If Jira is open in a tab, it finds your site on its own.
 
-It works with Jira Cloud out of the box and with Jira Server / Data Center after you allow access to your site.
+It works with Jira Cloud out of the box and with Jira Server / Data Center after you allow access to your site. Support for GitHub, GitLab, Linear and other trackers is planned.
 
 ## Install
 
@@ -27,7 +27,7 @@ It works with Jira Cloud out of the box and with Jira Server / Data Center after
 
 **From a release:**
 
-1. Download `jira-jump-x.y.z.zip` from the [latest release](https://github.com/rejochandran/jira-jump/releases/latest) and unzip it.
+1. Download `issue-jump-x.y.z.zip` from the [latest release](https://github.com/rejochandran/issue-jump/releases/latest) and unzip it.
 2. Open `chrome://extensions` and turn on **Developer mode**.
 3. Click **Load unpacked** and choose the unzipped folder.
 
@@ -35,7 +35,7 @@ It works with Jira Cloud out of the box and with Jira Server / Data Center after
 
 ## Using it
 
-| You type | Jira Jump opens |
+| You type | Issue Jump opens |
 |---|---|
 | `ABC-123`, `abc123`, `abc 123` | ABC-123 |
 | `123` | ABC-123, once ABC is your default project |
@@ -58,7 +58,7 @@ The default project is learned from the first issue you open, and can be changed
 
 ## Privacy
 
-Jira Jump has no server, no analytics and no account. Your settings and recent issues stay in your browser. Previews and search talk only to your own Jira site, using the login you already have. See [PRIVACY.md](PRIVACY.md).
+Issue Jump has no server, no analytics and no account. Your settings and recent issues stay in your browser. Previews and search talk only to your own Jira site, using the login you already have. See [PRIVACY.md](PRIVACY.md).
 
 | Permission | Why |
 |---|---|
@@ -77,7 +77,7 @@ No build step and no dependencies. You need Node 20 or newer for the tooling.
 npm test          # unit tests
 npm run check     # manifest, version and store-policy checks
 npm run preview   # the popup in a normal browser tab, with fake data
-npm run build     # dist/jira-jump-<version>.zip
+npm run build     # dist/issue-jump-<version>.zip
 ```
 
 ```
@@ -95,10 +95,10 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) to get involved and [docs/releasing.md](d
 
 ## Support the project
 
-Jira Jump is free and will stay free. If it saves you time, you can help by starring the repository, [reporting bugs](https://github.com/rejochandran/jira-jump/issues/new/choose), or [sponsoring its development](https://github.com/sponsors/rejochandran).
+Issue Jump is free and will stay free. If it saves you time, you can help by starring the repository, [reporting bugs](https://github.com/rejochandran/issue-jump/issues/new/choose), or [sponsoring its development](https://github.com/sponsors/rejochandran).
 
 ## License
 
 [MIT](LICENSE)
 
-Jira Jump is an independent project. It is not affiliated with, endorsed by or sponsored by Atlassian. Jira is a trademark of Atlassian.
+Issue Jump is an independent project. It is not affiliated with, endorsed by or sponsored by Atlassian. Jira is a trademark of Atlassian.

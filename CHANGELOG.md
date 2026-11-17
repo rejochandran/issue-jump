@@ -1,12 +1,13 @@
 # Changelog
 
-All notable changes to Jira Jump are listed here.
+All notable changes to Issue Jump are listed here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
 ### Changed
 
+- Renamed from Jira Jump to Issue Jump, ahead of support for more issue trackers.
 - Automatic setup only picks your Jira site on its own when exactly one Jira Cloud site is open. With several open, it suggests one on the setup screen and waits for you to confirm.
 
 ## [1.0.0] - 2026-11-17
@@ -26,5 +27,5 @@ First public release.
 - Support for Jira Cloud and, with permission, Jira Server / Data Center.
 - Settings for the Jira site, default project, where issues open, previews, clipboard prefill and a custom issue link.
 
-[Unreleased]: https://github.com/rejochandran/jira-jump/compare/v1.0.0...dev
-[1.0.0]: https://github.com/rejochandran/jira-jump/releases/tag/v1.0.0
+[Unreleased]: https://github.com/rejochandran/issue-jump/compare/v1.0.0...dev
+[1.0.0]: https://github.com/rejochandran/issue-jump/releases/tag/v1.0.0

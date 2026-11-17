@@ -1,11 +1,11 @@
-# Contributing to Jira Jump
+# Contributing to Issue Jump
 
 Thanks for taking the time. Bug reports, ideas and pull requests are all welcome.
 
 ## Ways to help
 
-- **Report a bug** or **suggest a feature** using the [issue templates](https://github.com/rejochandran/jira-jump/issues/new/choose).
-- **Pick up an issue.** Ones labelled [`good first issue`](https://github.com/rejochandran/jira-jump/labels/good%20first%20issue) are a good start. Comment on it first so two people don't do the same work.
+- **Report a bug** or **suggest a feature** using the [issue templates](https://github.com/rejochandran/issue-jump/issues/new/choose).
+- **Pick up an issue.** Ones labelled [`good first issue`](https://github.com/rejochandran/issue-jump/labels/good%20first%20issue) are a good start. Comment on it first so two people don't do the same work.
 - **Test on Jira Server / Data Center.** Most development happens against Jira Cloud, so reports from self-hosted sites are especially useful.
 
 For anything larger than a small fix, open an issue to talk it through before writing code.
@@ -15,8 +15,8 @@ For anything larger than a small fix, open an issue to talk it through before wr
 You need Chrome (or another Chromium browser) and Node 20 or newer. There are no dependencies to install.
 
 ```bash
-git clone https://github.com/rejochandran/jira-jump.git
-cd jira-jump
+git clone https://github.com/rejochandran/issue-jump.git
+cd issue-jump
 git checkout dev
 npm test
 ```

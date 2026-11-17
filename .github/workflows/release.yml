@@ -48,7 +48,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: jira-jump-release
+          name: issue-jump-release
           path: dist/*.zip
 
       - name: Create GitHub release
@@ -71,7 +71,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: jira-jump-release
+          name: issue-jump-release
 
       - name: Upload and publish
         env:
@@ -85,7 +85,7 @@ jobs:
             echo "Skipped: store secrets are not configured." >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
-          zip=$(ls jira-jump-*.zip | head -n 1)
+          zip=$(ls issue-jump-*.zip | head -n 1)
 
           token=$(curl -sS --fail-with-body https://oauth2.googleapis.com/token \
             -d client_id="$CLIENT_ID" -d client_secret="$CLIENT_SECRET" \

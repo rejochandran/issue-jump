@@ -1,4 +1,4 @@
-// Packs extension/ into dist/jira-jump-<version>.zip, ready for the Chrome Web Store.
+// Packs extension/ into dist/issue-jump-<version>.zip, ready for the Chrome Web Store.
 //   node scripts/build.mjs          release build
 //   node scripts/build.mjs --dev    dev build: renamed and stamped so it can sit next to the store version
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -27,7 +27,7 @@ if (dev) {
   writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
 }
 
-const zip = join(dist, `jira-jump-${label}.zip`);
+const zip = join(dist, `issue-jump-${label}.zip`);
 execFileSync('zip', ['-r', '-q', '-X', zip, '.'], { cwd: stage });
 rmSync(stage, { recursive: true, force: true });
 console.log(zip.replace(root, ''));

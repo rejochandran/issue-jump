@@ -4,7 +4,7 @@ Copy for the developer dashboard. Keep it in step with the README and `PRIVACY.m
 
 ## Store listing tab
 
-**Name:** Jira Jump
+**Name:** Issue Jump
 
 **Summary** (132 characters max):
 
@@ -17,7 +17,7 @@ Copy for the developer dashboard. Keep it in step with the README and `PRIVACY.m
 **Description:**
 
 ```
-Jira Jump gets you to a Jira issue faster than opening Jira.
+Issue Jump gets you to a Jira issue faster than opening Jira.
 
 Press Alt+J, type "123", press Enter. That's it.
 
@@ -39,7 +39,7 @@ WHAT IT DOES FOR YOU
 • Finds your Jira site on its own if you have Jira open in a tab
 
 KEYBOARD
-• Alt+J opens Jira Jump (you can change the shortcut)
+• Alt+J opens Issue Jump (you can change the shortcut)
 • Up and Down move through the list, Enter opens
 • Cmd/Ctrl+Enter forces a new tab, Shift+Enter forces the current tab
 • Cmd/Ctrl+C copies the selected issue's link
@@ -49,10 +49,10 @@ No account, no analytics, no server. Settings and recent issues stay in your bro
 
 Works with Jira Cloud. Jira Server and Data Center work too, after you allow access to your site.
 
-Free and open source: https://github.com/rejochandran/jira-jump
+Free and open source: https://github.com/rejochandran/issue-jump
 Support development: https://github.com/sponsors/rejochandran
 
-Jira Jump is an independent project and is not affiliated with, endorsed by or sponsored by Atlassian. Jira is a trademark of Atlassian.
+Issue Jump is an independent project and is not affiliated with, endorsed by or sponsored by Atlassian. Jira is a trademark of Atlassian.
 ```
 
 **Images** (all in this folder):
@@ -66,14 +66,14 @@ Jira Jump is an independent project and is not affiliated with, endorsed by or s
 
 Regenerate them with `npm run screenshots`.
 
-**Homepage URL:** https://github.com/rejochandran/jira-jump
-**Support URL:** https://github.com/rejochandran/jira-jump/issues
+**Homepage URL:** https://github.com/rejochandran/issue-jump
+**Support URL:** https://github.com/rejochandran/issue-jump/issues
 
 ## Privacy practices tab
 
 **Single purpose:**
 
-> Jira Jump opens Jira issues quickly: the user types or pastes an issue key, number, link or search words, and the extension opens the matching issue in Jira.
+> Issue Jump opens Jira issues quickly: the user types or pastes an issue key, number, link or search words, and the extension opens the matching issue in Jira.
 
 **Permission justifications:**
 
@@ -90,7 +90,7 @@ Regenerate them with `npm run screenshots`.
 
 **Data usage:** tick nothing. The extension does not collect or transmit user data. Then certify all three statements (no selling data, no unrelated use, no creditworthiness use).
 
-**Privacy policy URL:** https://github.com/rejochandran/jira-jump/blob/main/PRIVACY.md
+**Privacy policy URL:** https://github.com/rejochandran/issue-jump/blob/main/PRIVACY.md
 
 ## Distribution tab
 
@@ -98,5 +98,5 @@ Regenerate them with `npm run screenshots`.
 
 ## Before submitting
 
-- The name uses Atlassian's "Jira" trademark. Atlassian's guidelines ask third parties to use a form like "X for Jira" and not to lead with their mark. If the store or Atlassian objects, "Jump for Jira" is the fallback; it only needs changing in `manifest.json` (`name`) and this listing.
+- "Jira" appears only in the description, to say what the extension works with. Keep it out of the name and the icon.
 - The first submission is manual. See [docs/releasing.md](../docs/releasing.md).

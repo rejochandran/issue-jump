@@ -1,4 +1,4 @@
-# Jira Jump
+# Issue Jump
 
 Chrome extension (Manifest V3) that opens Jira issues from a popup, the address bar and the right-click menu.
 Plain ES modules, HTML and CSS. No dependencies, no bundler, no build step: `extension/` ships exactly as written.
@@ -9,7 +9,7 @@ Plain ES modules, HTML and CSS. No dependencies, no bundler, no build step: `ext
 npm test          # unit tests (node:test) for extension/lib/jira.js
 npm run check     # manifest, version sync, permission and store-policy checks
 npm run preview   # popup in a browser tab with a fake chrome API and fake Jira data (port 8765)
-npm run build     # dist/jira-jump-<version>.zip      (--dev variant: npm run build:dev)
+npm run build     # dist/issue-jump-<version>.zip      (--dev variant: npm run build:dev)
 npm run icons     # re-render PNG icons from extension/icons/icon.svg (needs rsvg-convert)
 ```
 

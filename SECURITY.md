@@ -9,7 +9,7 @@ Only the latest release receives security fixes.
 Please do not open a public issue for security problems.
 
 Report it privately through GitHub: go to the repository's **Security** tab and choose **Report a vulnerability**
-([direct link](https://github.com/rejochandran/jira-jump/security/advisories/new)).
+([direct link](https://github.com/rejochandran/issue-jump/security/advisories/new)).
 
 Include what you found, how to reproduce it and what an attacker could do with it. You can expect a first reply within a week. Once a fix is released, you will be credited in the release notes unless you prefer otherwise.
 
