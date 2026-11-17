@@ -88,7 +88,7 @@
         { url: `${SITE}/browse/WEB-405`, title: '[WEB-405] Checkout button overlaps footer on small screens - Jira', lastVisitTime: now - 7 * 60 * min },
       ].filter((v) => v.url.includes(text)),
     },
-    runtime: { sendMessage: async () => {}, getManifest: () => ({ version: '1.2.0' }), getURL: (p) => `/${p}` },
+    runtime: { sendMessage: async () => {}, getManifest: () => ({ version: '1.2.1' }), getURL: (p) => `/${p}` },
   };
   window.close = () => log('window.close');
 

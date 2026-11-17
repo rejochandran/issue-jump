@@ -5,9 +5,15 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-11-17
+
 ### Fixed
 
 - A suggestion to add a tracker no longer hides the notice that you are signed out of one.
+
+### Changed
+
+- User documentation is now available as a [wiki](https://github.com/rejochandran/issue-jump/wiki), and feature requests have moved to [Discussions](https://github.com/rejochandran/issue-jump/discussions/categories/ideas).
 
 ## [1.2.0] - 2026-11-17
 
@@ -64,7 +70,8 @@ First public release.
 - Support for Jira Cloud and, with permission, Jira Server / Data Center.
 - Settings for the Jira site, default project, where issues open, previews, clipboard prefill and a custom issue link.
 
-[Unreleased]: https://github.com/rejochandran/issue-jump/compare/v1.2.0...dev
+[Unreleased]: https://github.com/rejochandran/issue-jump/compare/v1.2.1...dev
+[1.2.1]: https://github.com/rejochandran/issue-jump/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/rejochandran/issue-jump/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/rejochandran/issue-jump/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/rejochandran/issue-jump/releases/tag/v1.0.0
