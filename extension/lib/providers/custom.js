@@ -24,6 +24,17 @@ export default {
   title: (t) => t.name,
   detail: (t) => hostOf(originOf(t.template) || ''),
   home: (t) => originOf(t.template),
+  host: (t) => hostOf(originOf(t.template) || ''),
+  /** The key in a link that matches the user's pattern. */
+  fromUrl(u, t) {
+    const [before, after = ''] = t.template.split('{key}');
+    const href = u.href;
+    if (!href.startsWith(before)) return null;
+    const key = decodeURIComponent(href.slice(before.length).split(/[/?#]/)[0] || '');
+    const rest = href.slice(before.length + encodeURIComponent(key).length);
+    if (!key || (after && !rest.startsWith(after.split(/[?#]/)[0]))) return null;
+    return (t.style === 'number' ? /^\d{1,7}$/ : /^[A-Za-z][A-Za-z0-9_]*-\d{1,7}$/).test(key) ? key.toUpperCase() : null;
+  },
   origins: () => [],
   accepts: (t) => t.style !== 'number', // ABC-123 style keys
 

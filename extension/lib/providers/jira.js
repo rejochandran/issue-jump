@@ -34,6 +34,9 @@ export default {
 
   detail: (t) => hostOf(t.site),
   home: (t) => t.site,
+  host: (t) => hostOf(t.site),
+  /** "[WEB-12] Fix login - Jira" -> "Fix login" */
+  titleFrom: (title) => title.replace(/^\[[^\]]+\]\s*/, '').replace(/\s+[-–|]\s+[^-–|]*$/, '').trim(),
   origins: (t) => [`${t.site}/*`],
 
   url: (key, t) => (t.template || `${t.site}/browse/{key}`).replaceAll('{key}', encodeURIComponent(key)),
@@ -91,6 +94,14 @@ export default {
   async projects(query, t, signal) {
     const r = await api(t, `api/2/project/search?maxResults=4&query=${encodeURIComponent(query)}`, signal);
     return r.ok ? (r.data.values || []).map((p) => ({ key: p.key, name: p.name, url: `${t.site}/browse/${encodeURIComponent(p.key)}` })) : [];
+  },
+  /** Issues the user viewed recently, in Jira or anywhere else, newest first. */
+  async recent(t, signal) {
+    const q = `jql=${encodeURIComponent('issuekey in issueHistory() ORDER BY lastViewed DESC')}&fields=summary,status,lastViewed&maxResults=20`;
+    let r = await api(t, `api/3/search/jql?${q}`, signal);
+    if (!r.ok && r.status !== 401 && r.status !== 403) r = await api(t, `api/2/search?${q}`, signal);
+    if (!r.ok) return null;
+    return (r.data.issues || []).map((i) => ({ ...shape(i.key, i.fields), ts: Date.parse(i.fields?.lastViewed) || 0 }));
   },
   async mine(t, signal) {
     const q = `jql=${encodeURIComponent('assignee = currentUser() AND statusCategory != Done ORDER BY updated DESC')}&fields=summary,status&maxResults=25`;

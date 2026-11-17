@@ -2,7 +2,7 @@
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  getSettings, saveTrackers, addHistory, getHistory, updateHistory, removeHistory, clearHistory, recordOpen, enrichHistory, canLookup,
+  getSettings, saveTrackers, addHistory, getHistory, updateHistory, removeHistory, clearHistory, recordOpen, enrichHistory, canLookup, mergeSeen, seenInBrowser,
 } from '../extension/lib/core.js';
 
 let store;
@@ -97,6 +97,57 @@ test('opening an issue teaches the prefix and the default project', async () => 
   await recordOpen([ref('j', 'WEB-2')], settings);
   assert.deepEqual(store.sync.prefixes, { ENG: 'n', WEB: 'j' });
   assert.equal(settings.trackers.find((t) => t.id === 'j').project, 'WEB');
+});
+
+test('imported issues merge in without disturbing what is there', async () => {
+  const now = Date.now();
+  await addHistory([{ ...ref('j', 'WEB-1'), summary: 'Opened here', pinned: true }]);
+  assert.equal(await mergeSeen([]), false);
+  assert.equal(await mergeSeen([
+    { ...ref('j', 'WEB-1'), summary: 'Other title', ts: now - 5000 }, // older than our own open: no change
+    { ...ref('j', 'WEB-2'), summary: 'Seen in Jira', status: 'To Do', ts: now - 60000 },
+    { ...ref('j', 'WEB-3'), ts: 0 }, // no time, ignored
+  ]), true);
+  const h = await getHistory();
+  assert.deepEqual(h.map((x) => x.key).sort(), ['WEB-1', 'WEB-2']);
+  assert.equal(h.find((x) => x.key === 'WEB-1').summary, 'Opened here');
+  assert.equal(h.find((x) => x.key === 'WEB-1').pinned, true);
+  // Same data again changes nothing.
+  assert.equal(await mergeSeen([{ ...ref('j', 'WEB-2'), summary: 'Seen in Jira', status: 'To Do', ts: now - 60000 }]), false);
+  // A later view moves it up and refreshes the status.
+  assert.equal(await mergeSeen([{ ...ref('j', 'WEB-2'), status: 'Done', statusColor: 'green', ts: now + 1000 }]), true);
+  assert.equal((await getHistory()).find((x) => x.key === 'WEB-2').status, 'Done');
+});
+
+test('removed and cleared issues do not come back from imports', async () => {
+  const now = Date.now();
+  await mergeSeen([{ ...ref('j', 'WEB-1'), ts: now - 1000 }, { ...ref('j', 'WEB-2'), ts: now - 2000 }]);
+  await removeHistory(ref('j', 'WEB-1'));
+  await mergeSeen([{ ...ref('j', 'WEB-1'), ts: now - 500 }]);
+  assert.deepEqual((await getHistory()).map((x) => x.key), ['WEB-2']);
+
+  // Opening it yourself brings it back for good.
+  await recordOpen([ref('j', 'WEB-1')], { trackers: [structuredClone(jira)], prefixes: {} });
+  await removeHistory(ref('j', 'WEB-2'));
+  assert.deepEqual(store.local.hidden, ['j:WEB-2']);
+
+  await clearHistory();
+  assert.equal(await mergeSeen([{ ...ref('j', 'WEB-9'), ts: now - 500 }]), false); // viewed before the clear
+  assert.equal(await mergeSeen([{ ...ref('j', 'WEB-9'), ts: Date.now() + 1000 }]), true); // viewed after it
+});
+
+test('browser history is read only when switched on and permitted', async () => {
+  let searches = 0;
+  globalThis.chrome.history = { search: async () => { searches += 1; return [{ url: 'https://acme.atlassian.net/browse/WEB-7', title: '[WEB-7] From history - Jira', lastVisitTime: 5 }]; } };
+  const settings = { trackers: [jira], useHistory: false };
+  assert.deepEqual(await seenInBrowser(settings), []);
+  settings.useHistory = true;
+  assert.deepEqual(await seenInBrowser(settings), []); // switched on, permission not granted
+  assert.equal(searches, 0);
+  globalThis.chrome.permissions.contains = async ({ permissions }) => (permissions || []).includes('history');
+  const found = await seenInBrowser(settings);
+  assert.deepEqual(found.map((e) => [e.key, e.summary]), [['WEB-7', 'From history']]);
+  assert.equal(searches, 1);
 });
 
 test('lookups need granted access, and background fills make no request without it', async () => {

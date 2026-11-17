@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Issue Jump",
   "short_name": "Issue Jump",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Jump to any issue in one keystroke. Type a key, number, link or a few words. Works with Jira, GitHub, GitLab, Linear and more.",
   "homepage_url": "https://github.com/rejochandran/issue-jump",
   "minimum_chrome_version": "116",
@@ -34,7 +34,7 @@
     }
   },
   "permissions": ["tabs", "storage", "contextMenus"],
-  "optional_permissions": ["clipboardRead"],
+  "optional_permissions": ["clipboardRead", "history"],
   "host_permissions": ["https://*.atlassian.net/*"],
   "optional_host_permissions": ["https://*/*", "http://*/*"]
 }

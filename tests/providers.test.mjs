@@ -51,6 +51,18 @@ test('Jira: issue, missing issue, search, mine, whoami', async () => {
   assert.deepEqual(await p.whoami(jira), { name: 'Maya Okafor' });
 });
 
+test('Jira: recently viewed issues come with the time they were viewed', async () => {
+  const p = providerOf('jira');
+  reply('api/3/search/jql', { issues: [{ key: 'WEB-5', fields: { summary: 'Viewed', status: { name: 'To Do' }, lastViewed: '2026-01-02T03:04:05.000+0000' } }] });
+  const [seen] = await p.recent(jira);
+  assert.equal(seen.key, 'WEB-5');
+  assert.equal(seen.ts, Date.parse('2026-01-02T03:04:05.000+0000'));
+  assert.ok(decodeURIComponent(calls[0].url).includes('issueHistory()'));
+  routes = [];
+  reply('api/3/search/jql', {}, 401);
+  assert.equal(await p.recent(jira), null);
+});
+
 test('Jira: guesses the default project from recently viewed issues', async () => {
   const p = providerOf('jira');
   reply('/issue/picker?query=', { sections: [{ issues: [{ key: 'WEB-1' }, { key: 'OPS-2' }, { key: 'WEB-9' }] }] });

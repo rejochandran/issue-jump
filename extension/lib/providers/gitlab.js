@@ -45,6 +45,9 @@ export default {
 
   detail: (t) => t.project || hostOf(t.site),
   home: (t) => `${t.site}/users/sign_in`,
+  host: (t) => hostOf(t.site),
+  /** "Fix login (#12) · Issues · acme / api · GitLab" -> "Fix login" */
+  titleFrom: (title) => title.split(' · ')[0].replace(/\s*\([#!]\d+\)$/, '').trim(),
   origins: (t) => [`${t.site}/*`],
 
   url: (key, t) => { const { path, number, kind } = split(key); return `${t.site}/${path}/-/${kind}/${number}`; },

@@ -18,7 +18,7 @@ It works with Jira, GitHub, GitLab and Linear, and with any other tracker you gi
 - **Shows the issue before you open it.** Title and status appear as you type.
 - **Searches when you don't know the key.** Type a few words to search every connected tracker.
 - **Knows what you're looking at.** Issues mentioned in the current page's title or address are offered first.
-- **Keeps your recent and pinned issues**, plus the open issues assigned to you.
+- **Keeps your recent and pinned issues**, including ones you viewed in Jira directly, plus the open issues assigned to you.
 - **Works from the address bar** (`j`, space, then a key) and from the right-click menu on selected text.
 - **Sets itself up.** Trackers open in your tabs are found and added on their own.
 
@@ -82,6 +82,7 @@ Issue Jump has no server, no analytics and no account. Settings and recent issue
 | `contextMenus` | The right-click "Jump to" item |
 | `*.atlassian.net` | Previews and search on Jira Cloud |
 | `clipboardRead` (optional) | Only if you turn on "Paste from clipboard" |
+| `history` (optional) | Only if you turn on "Use browser history", to add issues you visited to Recent |
 | Other sites (optional) | Asked for one at a time, only for a tracker you add: `api.github.com`, `gitlab.com`, `api.linear.app` or your own server |
 
 ## Development

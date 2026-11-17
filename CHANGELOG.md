@@ -5,7 +5,16 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
-## [1.1.1] - 2026-11-17
+## [1.2.0] - 2026-11-17
+
+### Added
+
+- Recent issues now include the ones you viewed in Jira itself, not only those opened through Issue Jump. A new install starts with your latest Jira issues already listed.
+- Optional "Use browser history" setting: fills Recent with issues you visited in any connected tracker, including custom ones. Off by default; Chrome asks for permission when you turn it on.
+
+### Changed
+
+- Removing an issue from Recent keeps it out until you open it again, and Clear only lets in issues viewed afterwards.
 
 ### Fixed
 
@@ -51,7 +60,7 @@ First public release.
 - Support for Jira Cloud and, with permission, Jira Server / Data Center.
 - Settings for the Jira site, default project, where issues open, previews, clipboard prefill and a custom issue link.
 
-[Unreleased]: https://github.com/rejochandran/issue-jump/compare/v1.1.1...dev
-[1.1.1]: https://github.com/rejochandran/issue-jump/compare/v1.1.0...v1.1.1
+[Unreleased]: https://github.com/rejochandran/issue-jump/compare/v1.2.0...dev
+[1.2.0]: https://github.com/rejochandran/issue-jump/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/rejochandran/issue-jump/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/rejochandran/issue-jump/releases/tag/v1.0.0

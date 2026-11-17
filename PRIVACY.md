@@ -11,7 +11,7 @@ Nothing. Issue Jump has no server, no analytics, no advertising and no account. 
 ## What is stored on your device
 
 - **Settings** (which trackers you use, their addresses, default projects and preferences) are kept in Chrome's synced storage, so they follow you to other browsers where you are signed in to Chrome. Google's sync service handles that; the author has no access to it.
-- **Recent and pinned issues** (key, title, status, link and when you opened it) are kept in Chrome's local storage on this device only.
+- **Recent and pinned issues** (key, title, status, link and when you last opened or viewed it) are kept in Chrome's local storage on this device only. This includes issues you viewed in Jira directly, which Jira reports, and, if you turn on "Use browser history", issues you visited in your connected trackers.
 - **API keys**, if you choose to add one for GitHub or Linear, are kept in Chrome's local storage on this device only. They are never synced and are sent only to the service they belong to.
 
 You can clear recent issues and remove any tracker, with its key, in the extension's settings. Removing the extension removes all of it.
@@ -39,6 +39,7 @@ Issue Jump never sees or stores your passwords or browser sessions. No request i
 | `contextMenus` | Add "Jump to" to the right-click menu for selected text. |
 | `https://*.atlassian.net/*` | Previews and search on Jira Cloud. |
 | `clipboardRead` (optional) | Requested only if you turn on "Paste from clipboard". The clipboard is read when the popup opens, only to look for an issue key, and is never stored or sent. |
+| `history` (optional) | Requested only if you turn on "Use browser history". Your browser history is searched for addresses on your connected trackers from the last 30 days, and only pages that are issues are kept, as entries in Recent. No other history is read, stored or sent anywhere. |
 | Access to another site (optional) | Requested one site at a time, only for a tracker you add or approve: `api.github.com`, `gitlab.com`, `api.linear.app`, or your own Jira or GitLab server. |
 
 ## Changes

@@ -10,6 +10,7 @@ export const DEFAULTS = {
   mode: 'auto', // auto | new | current
   autoClipboard: false,
   preview: true,
+  useHistory: false, // also fill recent issues from the browser's history (needs the optional `history` permission)
 };
 
 const HISTORY_LIMIT = 30;
@@ -191,6 +192,34 @@ export function detectTrackers(tabs, existing = []) {
   return list.filter((e) => !have.has(signature(e)));
 }
 
+/**
+ * Turn browser-history visits into recent-issue entries.
+ * `visits` are { url, title, lastVisitTime }. Only links that one of the
+ * trackers recognises as its own issue are kept; everything else is ignored.
+ */
+export function fromVisits(visits, trackers) {
+  const byId = new Map();
+  for (const v of visits) {
+    let url;
+    try { url = new URL(v.url); } catch { continue; }
+    for (const t of trackers) {
+      const p = providerOf(t);
+      const key = p.fromUrl?.(url, t);
+      if (!key) continue;
+      const id = `${t.id}:${key}`;
+      const ts = Math.floor(v.lastVisitTime || 0);
+      const prior = byId.get(id);
+      if (!prior || ts > prior.ts) {
+        const title = String(v.title || '').trim();
+        const summary = title && p.titleFrom ? p.titleFrom(title) : '';
+        byId.set(id, { tracker: t.id, key, url: p.url(key, t), summary: summary && summary !== key ? summary.slice(0, 200) : prior?.summary || '', ts });
+      }
+      break;
+    }
+  }
+  return [...byId.values()].sort((a, b) => b.ts - a.ts);
+}
+
 export function sortHistory(history) {
   return [...history].sort((a, b) => (Number(b.pinned) - Number(a.pinned)) || (b.ts - a.ts));
 }
@@ -323,13 +352,54 @@ export async function updateHistory(ref, patch) {
   await writeHistory(history);
 }
 
+/** Removing an issue also hides it from imports, so it does not come straight back. */
 export async function removeHistory(ref) {
   await writeHistory((await getHistory()).filter((h) => !same(h, ref)));
+  const { hidden } = await chrome.storage.local.get({ hidden: [] });
+  await chrome.storage.local.set({ hidden: [...new Set([`${ref.tracker}:${ref.key}`, ...hidden])].slice(0, 300) });
 }
 
+/** Clearing also marks the moment, so imports only bring in what was viewed after it. */
 export async function clearHistory({ keepPinned = true } = {}) {
   const history = keepPinned ? (await getHistory()).filter((h) => h.pinned) : [];
-  await chrome.storage.local.set({ history });
+  await chrome.storage.local.set({ history, clearedAt: Date.now(), hidden: [] });
+}
+
+/**
+ * Merge issues seen elsewhere (the tracker's own recently-viewed list, browser
+ * history) into recent issues. Entries need { tracker, key, url, ts }. Never
+ * moves an issue back in time, never revives one the user removed or cleared.
+ * Returns true when anything changed.
+ */
+export async function mergeSeen(entries) {
+  if (!entries.length) return false;
+  const [history, { hidden, clearedAt }] = await Promise.all([getHistory(), chrome.storage.local.get({ hidden: [], clearedAt: 0 })]);
+  let changed = false;
+  for (const e of entries) {
+    if (!e.ts || e.ts <= clearedAt || hidden.includes(`${e.tracker}:${e.key}`)) continue;
+    const existing = history.find((h) => same(h, e));
+    if (!existing) {
+      history.push({ summary: '', status: '', statusColor: '', pinned: false, ...e });
+      changed = true;
+      continue;
+    }
+    if (e.ts > existing.ts) { existing.ts = e.ts; changed = true; }
+    if (e.summary && !existing.summary) { existing.summary = e.summary; changed = true; }
+    if (e.status && e.status !== existing.status) { existing.status = e.status; existing.statusColor = e.statusColor || ''; changed = true; }
+  }
+  if (changed) await writeHistory(history);
+  return changed;
+}
+
+/** Recently visited issues from the browser's history, when the user has allowed it. */
+export async function seenInBrowser(settings) {
+  if (!settings.useHistory || !chrome.history) return [];
+  if (!(await chrome.permissions.contains({ permissions: ['history'] }).catch(() => false))) return [];
+  const trackers = enabledTrackers(settings).filter((t) => providerOf(t).fromUrl && providerOf(t).host);
+  const startTime = Date.now() - 30 * 86400e3;
+  const batches = await Promise.all([...new Set(trackers.map((t) => providerOf(t).host(t)))].filter(Boolean)
+    .map((text) => chrome.history.search({ text, startTime, maxResults: 300 }).catch(() => [])));
+  return fromVisits(batches.flat(), trackers).slice(0, 40);
 }
 
 /**
@@ -338,6 +408,9 @@ export async function clearHistory({ keepPinned = true } = {}) {
  */
 export async function recordOpen(entries, settings) {
   await addHistory(entries);
+  const { hidden } = await chrome.storage.local.get({ hidden: [] });
+  const opened = new Set(entries.map((e) => `${e.tracker}:${e.key}`));
+  if (hidden.some((id) => opened.has(id))) await chrome.storage.local.set({ hidden: hidden.filter((id) => !opened.has(id)) });
   let learned = false;
   let trackersChanged = false;
   for (const e of entries) {

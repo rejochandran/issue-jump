@@ -46,6 +46,9 @@ export default {
 
   detail: (t) => t.repo || 'github.com',
   home: () => 'https://github.com/login',
+  host: () => 'github.com',
+  /** "Fix login by maya · Pull Request #9 · acme/web" -> "Fix login" */
+  titleFrom: (title) => title.split(' · ')[0].replace(/\s+by\s+\S+$/, '').trim(),
   origins: () => [`${API}/*`],
 
   url: (key) => { const { repo, number } = split(key); return `https://github.com/${repo}/issues/${number}`; },

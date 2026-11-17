@@ -30,6 +30,7 @@ Run `npm test && npm run check` before finishing any change.
 
 - A tracker is `{ id, type, enabled, ...provider fields }`. Trackers live in `chrome.storage.sync` under `trackers`; their tokens live in `chrome.storage.local` under `tokens` and are merged in by `getSettings()`. Save with `saveTrackers()`, never by writing `trackers` directly.
 - An issue reference is `{ tracker, key, url }`. History entries add `summary`, `status`, `statusColor`, `pinned`, `ts`.
+- Issues seen outside the extension (a provider's `recent()`, browser history) enter history through `mergeSeen()`, which never moves an issue back in time and skips ones the user removed (`hidden`) or cleared (`clearedAt`).
 - `settings.numbersTo` is the tracker bare numbers go to. `settings.prefixes` maps a learned key prefix to a tracker id.
 
 ## Rules
@@ -39,7 +40,8 @@ Run `npm test && npm run check` before finishing any change.
 - **Network requests go only to a configured tracker's own host**, through `request()` in `lib/http.js`. No analytics, no other hosts, no remote code, no `eval`.
 - **Trackers are added without asking only when `detect` returns `trusted: true`**, which is reserved for exact hostnames over HTTPS (`github.com`, `gitlab.com`, `linear.app`, a single `<name>.atlassian.net`). Anything self-hosted or ambiguous is a suggestion the user confirms. Never save a tracker taken from page content or a tab URL otherwise.
 - **Tokens never go to `chrome.storage.sync`** and are sent only to the service they belong to.
-- **Do not change permissions casually.** `scripts/check.mjs` pins them. A change must update `manifest.json`, `scripts/check.mjs`, `PRIVACY.md`, `store/listing.md` and the README table together, and is a major version bump.
+- **Do not change permissions casually.** `scripts/check.mjs` pins them. A change must update `manifest.json`, `scripts/check.mjs`, `PRIVACY.md`, `store/listing.md` and the README table together. A new required permission is a major version bump; a new optional one, requested only when the user turns a feature on, is a minor bump.
+- Browser history is read only in `seenInBrowser()`, only when `settings.useHistory` is on and the `history` permission is granted, and only pages a provider's `fromUrl` recognises are kept.
 - Host access: `*.atlassian.net` is granted at install. Every other host is requested at runtime with `chrome.permissions.request`, which only works inside a user gesture (a click handler).
 - Jumping must work without lookups: `provider.url()` never needs a network request or a token.
 - Keep pure logic pure and add a test in `tests/core.test.mjs` for every parsing, routing, detection or URL change.

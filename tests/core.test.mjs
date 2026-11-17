@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { resolve, refsOnPage, detectTrackers, migrate, signature, isBlankTab, resolvesToCurrent, sortHistory } from '../extension/lib/core.js';
+import { resolve, refsOnPage, detectTrackers, fromVisits, migrate, signature, isBlankTab, resolvesToCurrent, sortHistory } from '../extension/lib/core.js';
 import { providerOf, takesKeys, projectOf } from '../extension/lib/providers/index.js';
 import { normalizeSite } from '../extension/lib/http.js';
 
@@ -121,6 +121,42 @@ test('only unmistakable addresses are trusted', () => {
   for (const url of ['https://acme.atlassian.net.evil.example/x', 'https://evil-atlassian.net/x', 'http://acme.atlassian.net/x', 'https://a.b.atlassian.net/x', 'https://github.com.evil.example/a/b', 'http://github.com/a/b', 'https://notlinear.app/acme', 'https://gitlab.com.evil.example/a/b']) {
     assert.deepEqual(detectTrackers([{ url }]), [], url);
   }
+});
+
+test('browser history: only real issue pages are kept, newest visit wins', () => {
+  const custom = { id: 'k', type: 'custom', name: 'Kaneo', template: 'https://kaneo.example/task/{key}', style: 'number' };
+  const entries = fromVisits([
+    { url: 'https://acme.atlassian.net/browse/WEB-12', title: '[WEB-12] Fix login - Jira', lastVisitTime: 100 },
+    { url: 'https://acme.atlassian.net/browse/WEB-12?focusedCommentId=5', title: '[WEB-12] Fix login - Jira', lastVisitTime: 300.7 },
+    { url: 'https://acme.atlassian.net/jira/your-work', title: 'Your work - Jira', lastVisitTime: 900 },
+    { url: 'https://github.com/acme/web/pull/9', title: 'Add cache by maya · Pull Request #9 · acme/web', lastVisitTime: 200 },
+    { url: 'https://github.com/acme/web/pulls', title: 'Pull requests · acme/web', lastVisitTime: 950 },
+    { url: 'https://gitlab.com/acme/api/-/issues/4', title: 'Slow query (#4) · Issues · acme / api · GitLab', lastVisitTime: 150 },
+    { url: 'https://linear.app/acme/issue/ENG-3/latency', title: 'ENG-3 Latency', lastVisitTime: 50 },
+    { url: 'https://linear.app/other/issue/ENG-3/latency', title: 'ENG-3 Not mine', lastVisitTime: 999 }, // another workspace
+    { url: 'https://kaneo.example/task/77', title: '', lastVisitTime: 120 },
+    { url: 'https://kaneo.example/task/new', title: 'New task', lastVisitTime: 990 },
+    { url: 'https://evil.example/browse/WEB-99', title: '[WEB-99] Not yours', lastVisitTime: 995 },
+    { url: 'not a url', title: 'x', lastVisitTime: 996 },
+  ], [jira, github, gitlab, linear, custom]);
+  assert.deepEqual(entries.map((e) => [e.key, e.summary, e.ts]), [
+    ['WEB-12', 'Fix login', 300],
+    ['acme/web#9', 'Add cache', 200],
+    ['acme/api#4', 'Slow query', 150],
+    ['77', '', 120],
+    ['ENG-3', 'Latency', 50],
+  ]);
+  assert.equal(entries[0].url, 'https://acme.atlassian.net/browse/WEB-12');
+});
+
+test('custom trackers recognise their own links', () => {
+  const p = providerOf('custom');
+  const byKey = { type: 'custom', template: 'https://t.example/i/{key}/view', style: 'key' };
+  assert.equal(p.fromUrl(new URL('https://t.example/i/abc-12/view'), byKey), 'ABC-12');
+  assert.equal(p.fromUrl(new URL('https://t.example/i/abc-12/edit'), byKey), null);
+  assert.equal(p.fromUrl(new URL('https://t.example/i/settings/view'), byKey), null);
+  assert.equal(p.fromUrl(new URL('https://other.example/i/abc-12/view'), byKey), null);
+  assert.equal(first('https://kaneo.example/issue/55', only(kaneo)).key, '55');
 });
 
 test('settings from 1.0 become a Jira tracker', () => {

@@ -33,6 +33,9 @@ A configured tracker is `{ id, type, enabled, ...your fields }`. Every function 
 | `issue(key, t, signal)` | | Return `{ key, summary, status, statusColor }`, `{ key, missing: true }`, or `null` on failure |
 | `search(text, t, signal)` | | Return a list of issues, or `null` on failure |
 | `mine(t, signal)` | | Open issues assigned to the user |
+| `recent(t, signal)` | | Issues the user viewed recently, each with `ts` (milliseconds) |
+| `guessProject(t, signal)` | | A likely default project when none is set |
+| `host(t)`, `titleFrom(title)` | | The hostname to look for in browser history, and how to get an issue title out of a page title |
 | `whoami(t, signal)` | | `{ name }` when signed in, `{ error: 'auth' }` or `{ error: 'network' }` otherwise |
 | `needsToken`, `canMine(t)` | | Say when lookups depend on a token |
 

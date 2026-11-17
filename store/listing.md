@@ -42,7 +42,7 @@ WHAT IT DOES FOR YOU
 • Shows the issue's title and status before you open it
 • Opens in a new tab, or reuses the tab you're on if it's blank
 • Spots issues mentioned on the page you're viewing and offers them first
-• Remembers recent issues and lets you pin the ones you return to
+• Remembers recent issues, including ones you viewed in your tracker directly, and lets you pin the ones you return to
 • Lists the open issues assigned to you, across trackers
 • Works from the address bar: type "j", press space, then the key
 • Adds "Jump to" to the right-click menu for selected text
@@ -92,6 +92,7 @@ Regenerate them with `npm run screenshots`.
 | `contextMenus` | Adds one "Jump to" item to the right-click menu for selected text. |
 | Host permission `https://*.atlassian.net/*` | Fetches issue titles, statuses and search results from the user's own Jira Cloud site through Jira's REST API, using their existing session, to show previews in the popup. |
 | `clipboardRead` (optional) | Requested only when the user turns on "Paste from clipboard". Reads the clipboard when the popup opens to prefill a copied issue key. |
+| `history` (optional) | Requested only when the user turns on "Use browser history". Searches history for addresses on the user's connected issue trackers and adds the issue pages found to the extension's recent-issues list. Nothing is transmitted. |
 | Optional host permissions `https://*/*`, `http://*/*` | Requested for a single origin at a time, only when the user adds or approves a tracker: `api.github.com`, `gitlab.com`, `api.linear.app`, or the address of their own Jira or GitLab server. Used to fetch issue titles, statuses and search results from that tracker. Never requested broadly. |
 
 **Remote code:** No, I am not using remote code.

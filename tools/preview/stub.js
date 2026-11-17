@@ -35,11 +35,11 @@
   const hist = (tracker, key, url, issue, pinned, ts) => ({ tracker, key, url, summary: issue.summary || issue.title, status: issue.status || '', statusColor: issue.statusColor || '', pinned, ts });
 
   const store = {
-    sync: scene === 'setup' ? {} : scene === 'noproject' ? { trackers: [{ ...TRACKERS[0], project: '' }, TRACKERS[1]], numbersTo: 'jira' } : scene === 'single' || scene === 'signedout' ? { trackers: TRACKERS.slice(0, 1), numbersTo: 'jira' } : { trackers: TRACKERS, numbersTo: 'jira' },
+    sync: scene === 'setup' ? {} : scene === 'history' ? { trackers: TRACKERS, numbersTo: 'jira', useHistory: true } : scene === 'noproject' ? { trackers: [{ ...TRACKERS[0], project: '' }, TRACKERS[1]], numbersTo: 'jira' } : scene === 'single' || scene === 'signedout' ? { trackers: TRACKERS.slice(0, 1), numbersTo: 'jira' } : { trackers: TRACKERS, numbersTo: 'jira' },
     local: {
       welcomed: scene !== 'empty',
       tokens: { linear: 'lin_api_demo' },
-      history: scene === 'empty' || scene === 'setup' ? [] : [
+      history: scene === 'empty' || scene === 'setup' || scene === 'history' ? [] : [
         hist('jira', 'WEB-412', `${SITE}/browse/WEB-412`, ISSUES[0], true, now - 50 * min),
         ...(scene === 'default' ? [
           hist('github', 'acme/web#198', 'https://github.com/acme/web/issues/198', { title: GH[1].title, status: 'Merged', statusColor: 'green' }, false, now - 2 * min),
@@ -76,7 +76,15 @@
       update: async (_id, o) => { log('tabs.update', o.url); },
     },
     permissions: { contains: async () => true, request: async () => true },
-    runtime: { sendMessage: async () => {}, getManifest: () => ({ version: '1.1.1' }), getURL: (p) => `/${p}` },
+    history: {
+      search: async ({ text }) => [
+        { url: 'https://github.com/acme/web/issues/187', title: 'Flaky checkout test on CI · Issue #187 · acme/web', lastVisitTime: now - 12 * min },
+        { url: 'https://github.com/acme/web/pulls', title: 'Pull requests · acme/web', lastVisitTime: now - 11 * min },
+        { url: 'https://linear.app/acme/issue/ENG-61/rate-limit-the-promo-endpoint', title: 'ENG-61 Rate limit the promo endpoint', lastVisitTime: now - 90 * min },
+        { url: `${SITE}/browse/WEB-405`, title: '[WEB-405] Checkout button overlaps footer on small screens - Jira', lastVisitTime: now - 7 * 60 * min },
+      ].filter((v) => v.url.includes(text)),
+    },
+    runtime: { sendMessage: async () => {}, getManifest: () => ({ version: '1.2.0' }), getURL: (p) => `/${p}` },
   };
   window.close = () => log('window.close');
 
@@ -118,6 +126,10 @@
       return issue ? json({ fields: fields(issue) }) : json({}, 404);
     }
     if (path.startsWith('project/search')) return json({ values: PROJECTS.filter((p) => `${p.key} ${p.name}`.toLowerCase().includes(q)) });
+    if (path.startsWith('search') && (url.searchParams.get('jql') || '').includes('issueHistory')) {
+      const seen = scene === 'empty' ? [ISSUES[2], ISSUES[5], ISSUES[7]] : [ISSUES[2]];
+      return json({ issues: seen.map((i, n) => ({ key: i.key, fields: { ...fields(i), lastViewed: new Date(now - (20 + n * 45) * min).toISOString() } })) });
+    }
     if (path.startsWith('search')) return json({ issues: ISSUES.filter((i) => i.assignee === 'Maya Okafor' && i.statusColor !== 'green').map((i) => ({ key: i.key, fields: fields(i) })) });
     return json({}, 404);
   };

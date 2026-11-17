@@ -30,7 +30,7 @@ const referenced = [
 for (const file of new Set(referenced)) if (!existsSync(join(ext, file))) fail(`manifest references missing file: ${file}`);
 
 // Permissions are part of the store listing, so changes must be deliberate.
-const allowed = { permissions: ['contextMenus', 'storage', 'tabs'], optional_permissions: ['clipboardRead'] };
+const allowed = { permissions: ['contextMenus', 'storage', 'tabs'], optional_permissions: ['clipboardRead', 'history'] };
 for (const [field, expected] of Object.entries(allowed)) {
   const actual = [...(manifest[field] || [])].sort();
   if (JSON.stringify(actual) !== JSON.stringify(expected)) {

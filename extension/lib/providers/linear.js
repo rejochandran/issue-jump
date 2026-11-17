@@ -41,6 +41,9 @@ export default {
   detail: (t) => t.workspace,
   project: (t) => t.team,
   home: () => 'https://linear.app/login',
+  host: () => 'linear.app',
+  /** "ENG-12 Fix login" -> "Fix login" */
+  titleFrom: (title) => title.replace(/^[A-Z][A-Z0-9]*-\d+\s*[-:›]?\s*/, '').replace(/\s+[-–|]\s+Linear$/, '').trim(),
   origins: (t) => (t.token ? ['https://api.linear.app/*'] : []),
   needsToken: true,
 

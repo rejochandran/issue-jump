@@ -1,7 +1,7 @@
 import {
   getSettings, saveSettings, saveTrackers, findTrackers, newTracker, signature, canLookup, requestAccess,
   contextOf, enabledTrackers, resolve, refsOnPage, resolvesToCurrent, openUrls,
-  getHistory, sortHistory, recordOpen, addHistory, updateHistory, removeHistory, clearHistory,
+  getHistory, sortHistory, recordOpen, addHistory, updateHistory, removeHistory, clearHistory, mergeSeen, seenInBrowser,
 } from './lib/core.js';
 import { PROVIDERS, providerOf, titleOf, projectOf } from './lib/providers/index.js';
 
@@ -445,6 +445,22 @@ async function hydrate() {
   if (changed) render();
 }
 
+/**
+ * Bring in issues viewed outside the extension: the tracker's own recently-viewed
+ * list where it has one, and the browser's history when the user has turned that on.
+ */
+async function importSeen() {
+  const fromTrackers = await Promise.all(live().filter((t) => providerOf(t).recent).map(async (t) => {
+    const found = await providerOf(t).recent(t);
+    return (found || []).map((i) => ({ tracker: t.id, key: i.key, url: providerOf(t).url(i.key, t), summary: i.summary, status: i.status, statusColor: i.statusColor, ts: i.ts }));
+  }));
+  const fromBrowser = await seenInBrowser(state.settings);
+  // Tracker data last, so its titles and statuses win over ones read from page titles.
+  if (!(await mergeSeen([...fromBrowser, ...fromTrackers.flat()]))) return;
+  state.history = await getHistory();
+  if (app.dataset.view === 'main') render();
+}
+
 /** Fill in a missing default project from what the user has been viewing, so bare numbers work unasked. */
 async function guessDefaults() {
   const lacking = live().filter((t) => providerOf(t).guessProject && !projectOf(t));
@@ -651,6 +667,7 @@ function renderSettings() {
   const s = state.settings;
   $('sPreview').checked = s.preview;
   $('sClipboard').checked = s.autoClipboard;
+  $('sHistory').checked = s.useHistory;
   $('sMode').querySelectorAll('button').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.mode === s.mode)));
   $('sModeHelp').textContent = MODE_HELP[s.mode];
   $('version').textContent = `v${chrome.runtime.getManifest().version}`;
@@ -690,6 +707,7 @@ function backToMain() {
   checkSessions();
   hydrate();
   guessDefaults();
+  importSeen();
 }
 
 async function update(patch, message = 'Saved') {
@@ -734,6 +752,13 @@ $('sClipboard').addEventListener('change', async () => {
   let on = $('sClipboard').checked;
   if (on) on = await chrome.permissions.request({ permissions: ['clipboardRead'] }).catch(() => false);
   await update({ autoClipboard: on }, on || !$('sClipboard').checked ? 'Saved' : 'Permission not granted');
+});
+
+$('sHistory').addEventListener('change', async () => {
+  let on = $('sHistory').checked;
+  // Still inside the click, so Chrome can show its permission prompt.
+  if (on) on = await chrome.permissions.request({ permissions: ['history'] }).catch(() => false);
+  await update({ useHistory: on }, on || !$('sHistory').checked ? 'Saved' : 'Permission not granted');
 });
 
 $('sMode').addEventListener('click', (e) => {
@@ -969,6 +994,7 @@ async function start() {
   checkSessions();
   hydrate();
   guessDefaults();
+  importSeen();
   tryClipboard();
 }
 
