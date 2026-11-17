@@ -5,6 +5,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+### Changed
+
+- Automatic setup only picks your Jira site on its own when exactly one Jira Cloud site is open. With several open, it suggests one on the setup screen and waits for you to confirm.
+
 ## [1.0.0] - 2026-11-17
 
 First public release.

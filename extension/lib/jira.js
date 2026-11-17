@@ -122,21 +122,27 @@ export function resolvesToCurrent(mode, tab) {
 /**
  * Look for a Jira site among open tabs.
  *
- * Returns { site, trusted }. Only Jira Cloud (https://<name>.atlassian.net) is trusted
- * enough to adopt without asking, because nobody but Atlassian can serve that domain.
- * Any other page that merely looks like Jira (a /browse/KEY-1 path) could be an
- * impostor, so it is only ever offered as a suggestion the user must confirm.
+ * Returns { site, trusted }. A site is adopted without asking only when it is the one
+ * and only Jira Cloud address (https://<name>.atlassian.net) among the open tabs.
+ * With several Cloud sites open there is no safe way to pick, and a page elsewhere
+ * that merely looks like Jira (a /browse/KEY-1 path) could be an impostor, so in
+ * both cases the best guess is only offered as a suggestion the user must confirm.
  */
 export function pickSiteFromTabs(tabs) {
   const ranked = [...tabs].sort((a, b) => (b.active - a.active) || ((b.lastAccessed || 0) - (a.lastAccessed || 0)));
-  let suggestion = null;
+  const cloud = [];
+  let lookalike = null;
   for (const t of ranked) {
     let u;
     try { u = new URL(t.url || ''); } catch { continue; }
-    if (u.protocol === 'https:' && /^[a-z0-9-]+\.atlassian\.net$/i.test(u.hostname)) return { site: u.origin, trusted: true };
-    if (!suggestion && /^https?:$/.test(u.protocol) && /\/browse\/[A-Z][A-Z0-9_]+-\d+/.test(u.pathname)) suggestion = u.origin;
+    if (u.protocol === 'https:' && /^[a-z0-9-]+\.atlassian\.net$/i.test(u.hostname)) {
+      if (!cloud.includes(u.origin)) cloud.push(u.origin);
+    } else if (!lookalike && /^https?:$/.test(u.protocol) && /\/browse\/[A-Z][A-Z0-9_]+-\d+/.test(u.pathname)) {
+      lookalike = u.origin;
+    }
   }
-  return suggestion ? { site: suggestion, trusted: false } : null;
+  if (cloud.length) return { site: cloud[0], trusted: cloud.length === 1 };
+  return lookalike ? { site: lookalike, trusted: false } : null;
 }
 
 export function sortHistory(history) {

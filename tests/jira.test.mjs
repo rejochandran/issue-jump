@@ -79,9 +79,14 @@ test('smart mode reuses blank tabs only', () => {
 test('finds the Jira Cloud site among open tabs', () => {
   assert.deepEqual(pickSiteFromTabs([
     { url: 'https://example.com/', active: true },
-    { url: 'https://old.atlassian.net/browse/A-1', active: false, lastAccessed: 1 },
+    { url: 'https://acme.atlassian.net/browse/A-1', active: false, lastAccessed: 1 },
     { url: 'https://acme.atlassian.net/jira/your-work', active: false, lastAccessed: 5 },
   ]), { site: 'https://acme.atlassian.net', trusted: true });
+  // Two different Cloud sites: suggest the most recent, but make the user confirm.
+  assert.deepEqual(pickSiteFromTabs([
+    { url: 'https://old.atlassian.net/browse/A-1', active: false, lastAccessed: 1 },
+    { url: 'https://acme.atlassian.net/jira/your-work', active: false, lastAccessed: 5 },
+  ]), { site: 'https://acme.atlassian.net', trusted: false });
   assert.equal(pickSiteFromTabs([{ url: 'chrome://newtab/', active: true }, { url: 'https://example.com/browse/', active: false }]), null);
 });
 

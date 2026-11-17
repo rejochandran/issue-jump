@@ -29,7 +29,7 @@ Run `npm test && npm run check` before finishing any change.
 - **Never pass text from Jira, a web page or the user to `innerHTML`.** Use `textContent` or DOM methods. `innerHTML` is only used with the static `ICONS` strings in `popup.js`.
 - **Network requests go only to `settings.site`**, through `rest()` in `lib/jira.js`. No analytics, no other hosts, no remote code, no `eval`.
 - **Do not change permissions casually.** `scripts/check.mjs` pins them. A change must update `manifest.json`, `scripts/check.mjs`, `PRIVACY.md`, `store/listing.md` and the README table together, and is a major version bump.
-- Site auto-detection only adopts `https://<name>.atlassian.net`. Any other origin must be typed or confirmed by the user on the setup screen; never save a site taken from page content or a tab URL without that.
+- Site auto-detection only adopts `https://<name>.atlassian.net`, and only when it is the single Cloud site among open tabs. Any other origin must be typed or confirmed by the user on the setup screen; never save a site taken from page content or a tab URL without that.
 - Host access: `*.atlassian.net` is granted at install. Any other Jira host is requested at runtime with `chrome.permissions.request`, which only works inside a user gesture (a click handler).
 - Keep pure logic in the top half of `lib/jira.js` and add a test in `tests/jira.test.mjs` for every parsing or URL change.
 - Jira REST: use `api/2` paths so Server / Data Center keeps working. The one exception is `api/3/search/jql` for Cloud, with an `api/2/search` fallback.
