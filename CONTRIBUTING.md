@@ -33,7 +33,7 @@ For UI work, `npm run preview` serves the popup at `http://localhost:8765/` with
 | Branch | Purpose |
 |---|---|
 | `dev` | Default branch. All pull requests target it. Every push produces a dev build. |
-| `main` | Released code only. Protected; it changes only through a release pull request from `dev`. A merge publishes to the Chrome Web Store. |
+| `main` | Released code only. It changes only through a release pull request from `dev`, with CI green; direct pushes are refused for everyone. A merge publishes to the Chrome Web Store. |
 
 1. Fork the repository and create a branch from `dev`: `git checkout -b fix/short-description dev`.
 2. Make your change.
@@ -76,6 +76,10 @@ docs: explain the dev build
 ```
 
 Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`.
+
+## Describing your pull request
+
+CI reads the description and fails if "What does this change?" or "How did you test it?" is missing or too thin. A few honest sentences in each is enough: what changes and why, what you ran, and what you could not test. Editing the description re-runs the check.
 
 ## Review
 

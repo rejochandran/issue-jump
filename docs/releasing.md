@@ -23,13 +23,39 @@ Both are visible under **Deployments** on the repository page. Each only accepts
 
 ## Cutting a release
 
-1. On `dev`, set the new version in **both** `extension/manifest.json` and `package.json`.
-2. In `CHANGELOG.md`, rename `## [Unreleased]` content to `## [X.Y.Z] - YYYY-MM-DD`, add a fresh empty `## [Unreleased]`, and update the links at the bottom.
-3. Run `npm test && npm run check`.
-4. Open a pull request from `dev` to `main` titled `Release X.Y.Z`. Merge it with a **merge commit** (not squash) so `main` and `dev` share history.
-5. Watch the **Release** workflow. The store usually reviews an update within a few days.
+`main` only changes through a pull request. Direct pushes are refused for everyone, including the owner, and a pull request can only be merged when CI passes.
 
-Version numbers: patch for fixes, minor for features, major for anything that breaks existing behaviour or adds a permission.
+1. On `dev`, set the new version in **both** `extension/manifest.json` and `package.json`.
+2. In `CHANGELOG.md`, move what is under `## [Unreleased]` into a new `## [X.Y.Z] - YYYY-MM-DD` section, leave an empty `## [Unreleased]` above it, and update the links at the bottom.
+3. Run `npm run test:all`, push `dev`, and try the dev build in Chrome.
+4. Open the release pull request with the release template:
+   `https://github.com/rejochandran/issue-jump/compare/main...dev?expand=1&template=release.md`
+   Title it `Release X.Y.Z`. Describe what users get and how it was tested, and tick the checklist.
+5. Wait for both checks: **check** (tests, popup tests, policy checks, build) and **description** (the pull request explains itself, the title matches the manifest version, the checklist is ticked).
+6. Merge with a **merge commit**, not squash, so `main` and `dev` share history.
+7. Watch the **Release** workflow. The store usually reviews an update within a few days.
+
+Version numbers: patch for fixes, minor for features, major for anything that breaks existing behaviour or adds a required permission.
+
+### What a good description looks like
+
+```markdown
+## What does this change?
+
+Adds GitLab merge requests.
+
+### Added
+- `group/project!34` and `!34` open merge requests, with title and status in the list.
+### Fixed
+- Search no longer shows the same issue twice when it is also in Recent.
+
+Worth a close look: `forNumber()` in core.js now tries other trackers for `!`.
+
+## How did you test it?
+
+Unit and popup tests pass. Loaded the dev build and opened merge requests on gitlab.com,
+by full reference, by `!34` and by link. Not tried on a self-hosted GitLab.
+```
 
 ## One-time Chrome Web Store setup
 

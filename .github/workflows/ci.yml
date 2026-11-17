@@ -3,6 +3,8 @@ name: CI
 on:
   pull_request:
     branches: [dev, main]
+    # "edited" so that fixing the description re-runs the check.
+    types: [opened, synchronize, reopened, edited]
   push:
     branches: [dev]
 
@@ -14,6 +16,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  description:
+    name: description
+    # Every pull request must say what it changes and how it was tested.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check the pull request description
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_BASE: ${{ github.event.pull_request.base.ref }}
+        run: node scripts/check-pr.mjs
+
   check:
     name: check
     runs-on: ubuntu-latest

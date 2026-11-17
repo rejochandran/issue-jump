@@ -1,10 +1,12 @@
 ## What does this change?
 
-<!-- A sentence or two. Link the issue it closes, e.g. "Closes #12". -->
+<!-- What changes for users or for the code, and why. Link the issue or idea it closes, e.g. "Closes #12".
+     CI checks that this section and the next are filled in. -->
 
 ## How did you test it?
 
-<!-- What you tried in Chrome. Add a screenshot or short recording for UI changes. -->
+<!-- What you ran and tried in Chrome, against which trackers, and anything you could not test.
+     Add a screenshot or short recording for UI changes. -->
 
 ## Checklist
 

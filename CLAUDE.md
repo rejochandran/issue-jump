@@ -78,8 +78,9 @@ Write the wiki for someone who has never seen the extension: what it does, the e
 
 ## Branches and releases
 
-- Work on `dev` (default branch). `main` is protected and holds released code only.
+- Work on `dev` (default branch). `main` holds released code only and changes **only through a pull request from `dev`**. Direct pushes are refused for everyone, admins included; never try to bypass or relax the protection.
+- A pull request to `main` needs both required checks green: `check` (unit tests, popup tests, policy checks, build) and `description` (`scripts/check-pr.mjs`). Write a real description: under "What does this change?" say what users get, grouped like the changelog, and what deserves a close look; under "How did you test it?" say what was run, against which trackers, and what was not tested. Use `.github/PULL_REQUEST_TEMPLATE/release.md` for releases, title `Release X.Y.Z`, tick the checklist truthfully. Merge with a merge commit.
 - User-visible changes get a line under `## [Unreleased]` in `CHANGELOG.md`.
 - The version lives in both `extension/manifest.json` and `package.json`; they must match.
-- A push to `main` with a new version tags it, creates a GitHub release and publishes to the Chrome Web Store. Never push to `main` directly; open a pull request from `dev`.
+- Merging to `main` with a new version tags it, creates a GitHub release and publishes to the Chrome Web Store.
 - Commit subjects: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`. Do not add AI attribution or co-author trailers to commits or pull requests.
