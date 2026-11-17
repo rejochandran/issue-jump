@@ -4,7 +4,8 @@ Thanks for taking the time. Bug reports, ideas and pull requests are all welcome
 
 ## Ways to help
 
-- **Report a bug** or **suggest a feature** using the [issue templates](https://github.com/rejochandran/issue-jump/issues/new/choose).
+- **Report a bug**, **suggest a feature** or **request a tracker** using the [issue forms](https://github.com/rejochandran/issue-jump/issues/new/choose).
+- **Vote.** Add a 👍 to the [open requests](https://github.com/rejochandran/issue-jump/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement%2C%22tracker+request%22+sort%3Areactions-%2B1-desc) you care about. Votes decide what gets built next; comments that only say "+1" don't count.
 - **Pick up an issue.** Ones labelled [`good first issue`](https://github.com/rejochandran/issue-jump/labels/good%20first%20issue) are a good start. Comment on it first so two people don't do the same work.
 - **Add a tracker.** Each one is a single small file; [docs/providers.md](docs/providers.md) explains how.
 - **Test on trackers we can't.** Jira Server / Data Center, self-hosted GitLab and less common setups are where reports help most.

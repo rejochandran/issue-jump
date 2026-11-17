@@ -75,7 +75,7 @@ Issue Jump is an independent project and is not affiliated with, endorsed by or 
 Regenerate them with `npm run screenshots`.
 
 **Homepage URL:** https://github.com/rejochandran/issue-jump
-**Support URL:** https://github.com/rejochandran/issue-jump/issues
+**Support URL:** https://github.com/rejochandran/issue-jump/issues/new/choose
 
 ## Privacy practices tab
 

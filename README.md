@@ -111,9 +111,17 @@ store/            Chrome Web Store listing text and images
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) to get involved and [docs/releasing.md](docs/releasing.md) for how releases reach the store.
 
+## Ideas and requests
+
+- **[Request a feature](https://github.com/rejochandran/issue-jump/issues/new?template=feature.yml)** or **[ask for another tracker](https://github.com/rejochandran/issue-jump/issues/new?template=tracker.yml)**.
+- **[Vote on open requests](https://github.com/rejochandran/issue-jump/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement%2C%22tracker+request%22+sort%3Areactions-%2B1-desc)** with a 👍. The most-wanted ones are worked on first.
+- **[Report a bug](https://github.com/rejochandran/issue-jump/issues/new?template=bug.yml)**.
+
+The same links are under **Feedback** in the extension's settings. You need a free GitHub account.
+
 ## Support the project
 
-Issue Jump is free and will stay free. If it saves you time, you can help by starring the repository, [reporting bugs](https://github.com/rejochandran/issue-jump/issues/new/choose), or [sponsoring its development](https://github.com/sponsors/rejochandran).
+Issue Jump is free and will stay free. If it saves you time, you can help by starring the repository or [sponsoring its development](https://github.com/sponsors/rejochandran).
 
 ## License
 
