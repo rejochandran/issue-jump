@@ -38,7 +38,7 @@ With **Open issues in → Smart**, a blank tab is reused. If it replaced a real 
 **"Sign in to … to see previews and search"**
 You are signed out of that tracker in this browser. Click **Sign in**, log in, reopen the popup.
 
-![The popup when signed out of Jira](images/signed-out.png)
+<img src="images/signed-out.png" alt="The popup when signed out of Jira" width="400">
 
 **"Turn on previews for …"**
 Click **Allow** and approve Chrome's prompt. If you declined before, click it again.

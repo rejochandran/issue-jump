@@ -70,7 +70,7 @@ Every behaviour change needs a test at the lowest level that can see it: pure lo
 Every commit that adds or changes something a user would notice must update the documentation in the same commit. Treat it as part of the feature, not a follow-up:
 
 1. **Wiki** (`wiki/`): update the page that covers it. A new tracker gets its own page plus rows in `Trackers.md`, `Home.md`, `_Sidebar.md` and `Privacy-and-permissions.md`. A new setting goes in `Settings.md`. A new failure a user can hit goes in `Troubleshooting.md`.
-2. **Screenshots**: if the popup looks different, run `npm run wiki:shots`. For a new screen, add a `shot` line to `scripts/wiki-shots.sh` (and a scene to `tools/preview/stub.js` if needed) and use the image on the page.
+2. **Screenshots**: embed them as `<img src="images/name.png" alt="…" width="400">`, never as markdown images (they are double-size captures). If the popup looks different, run `npm run wiki:shots`. For a new screen, add a `shot` line to `scripts/wiki-shots.sh` (and a scene to `tools/preview/stub.js` if needed) and use the image on the page.
 3. **`CHANGELOG.md`**: a line under `## [Unreleased]`.
 4. **`README.md`** when the feature list, the tracker table or the permission table changes; **`store/listing.md`** and `npm run screenshots` when the store description or screenshots would be out of date; **`PRIVACY.md`** when what is stored or sent changes.
 

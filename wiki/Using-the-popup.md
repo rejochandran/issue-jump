@@ -21,25 +21,25 @@ Upper or lower case does not matter.
 
 When previews are on, the issue's title and status appear as you type, before you open it.
 
-![Typing a number shows the matching issue with its title and status](images/preview.png)
+<img src="images/preview.png" alt="Typing a number shows the matching issue with its title and status" width="400">
 
 ### Several at once
 
 Paste a list separated by commas or spaces. **Open all** opens every one: the first in front, the rest in background tabs. Each goes to the tracker it belongs to.
 
-![A pasted list of three issues from Jira, GitHub and Linear](images/several.png)
+<img src="images/several.png" alt="A pasted list of three issues from Jira, GitHub and Linear" width="400">
 
 ### Searching
 
 Type a few words. Results come from your recent issues first, then from each connected tracker. The last rows open the tracker's own search page.
 
-![Search results grouped by tracker](images/search.png)
+<img src="images/search.png" alt="Search results grouped by tracker" width="400">
 
 ### When a key could belong to two trackers
 
 Jira and Linear both use keys like `OPS-88`. The first time you type a key from a project Issue Jump hasn't seen, it checks both trackers and shows where it found the issue. Once you open it, that project is remembered and goes straight to the right place.
 
-![A key found in Jira after checking both trackers](images/two-trackers.png)
+<img src="images/two-trackers.png" alt="A key found in Jira after checking both trackers" width="400">
 
 ## Where it opens
 
@@ -71,7 +71,7 @@ The label at the right of the box shows where Enter will open, and changes while
 
 **Assigned to me** lists your open issues across trackers. Click the heading or press `Tab` in an empty box.
 
-![The Assigned to me list combining Jira and Linear](images/assigned.png)
+<img src="images/assigned.png" alt="The Assigned to me list combining Jira and Linear" width="400">
 
 ## Pin, copy, remove
 

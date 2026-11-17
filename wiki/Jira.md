@@ -10,7 +10,7 @@ Works with Jira Cloud, Jira Server and Jira Data Center.
 | Recently viewed in Jira | ✓ added to Recent automatically |
 | Needs | Being signed in to Jira in this browser |
 
-![The Jira tracker page in settings](images/tracker-jira.png)
+<img src="images/tracker-jira.png" alt="The Jira tracker page in settings" width="400">
 
 ## Jira Cloud
 

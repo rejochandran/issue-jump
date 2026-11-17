@@ -7,7 +7,7 @@
 | Assigned to me | With an API key |
 | Needs | An API key for anything beyond jumping |
 
-![The Linear tracker page in settings](images/tracker-linear.png)
+<img src="images/tracker-linear.png" alt="The Linear tracker page in settings" width="400">
 
 ## Setup
 

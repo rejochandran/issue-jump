@@ -9,7 +9,7 @@ Issues and pull requests on github.com.
 | Assigned to me | With a token |
 | Needs | Nothing for public repositories |
 
-![The GitHub tracker page in settings](images/tracker-github.png)
+<img src="images/tracker-github.png" alt="The GitHub tracker page in settings" width="400">
 
 ## Setup
 
