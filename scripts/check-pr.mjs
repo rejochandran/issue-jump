@@ -1,5 +1,5 @@
 // Fails a pull request whose description does not explain the change.
-// Reads PR_TITLE, PR_BODY and PR_BASE from the environment (set by CI).
+// Reads PR_TITLE, PR_BODY, PR_BASE and PR_AUTHOR from the environment (set by CI).
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
@@ -8,6 +8,13 @@ const base = process.env.PR_BASE || '';
 // Template hints live in HTML comments; they do not count as a description.
 const body = (process.env.PR_BODY || '').replace(/<!--[\s\S]*?-->/g, '').replace(/\r/g, '');
 const errors = [];
+
+// Dependabot writes its own description (what was updated, release notes). It cannot follow
+// the template, and it never targets main, so it is let through for dev only.
+if (process.env.PR_AUTHOR === 'dependabot[bot]' && base !== 'main') {
+  console.log('✓ automated dependency update; description check skipped');
+  process.exit(0);
+}
 
 /** The text under a "## Heading", up to the next heading. */
 function section(heading) {

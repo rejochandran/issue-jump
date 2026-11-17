@@ -7,6 +7,4 @@ updates:
       interval: monthly
     commit-message:
       prefix: chore
-    # Dependabot's own description is short; the description check is satisfied by the labels below
-    # being handled by a maintainer, who edits the description before merging.
     labels: [dependencies]
