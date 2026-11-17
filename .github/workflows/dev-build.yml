@@ -15,6 +15,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: https://github.com/${{ github.repository }}/releases/tag/dev-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

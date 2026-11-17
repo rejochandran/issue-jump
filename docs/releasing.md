@@ -12,6 +12,15 @@
 
 If `main` is pushed without a version bump, the release workflow does nothing.
 
+## Environments
+
+| Environment | Deploys from | What it is |
+|---|---|---|
+| `dev` | `dev` | The rolling dev build on the `dev-latest` pre-release |
+| `production` | `main` | The Chrome Web Store. Holds the store secrets. |
+
+Both are visible under **Deployments** on the repository page. Each only accepts runs from its own branch.
+
 ## Cutting a release
 
 1. On `dev`, set the new version in **both** `extension/manifest.json` and `package.json`.
@@ -37,7 +46,7 @@ Then give the workflow access to the store API:
 2. Configure the OAuth consent screen (External, add your own account as a test user, then publish the app so the refresh token does not expire after 7 days).
 3. Create an **OAuth client ID** of type *Desktop app*. Note the client ID and secret.
 4. Get a refresh token for the scope `https://www.googleapis.com/auth/chromewebstore`, signed in as the account that owns the store item. The [official guide](https://developer.chrome.com/docs/webstore/using-api) walks through it.
-5. In the repository, go to **Settings → Environments → chrome-web-store** and add these secrets:
+5. In the repository, go to **Settings → Environments → production** and add these secrets:
 
    | Secret | Value |
    |---|---|
@@ -48,7 +57,7 @@ Then give the workflow access to the store API:
 
 Until those secrets exist, the release workflow still creates the GitHub release and simply skips the store step.
 
-Optional: add yourself as a required reviewer on the `chrome-web-store` environment to get a confirmation click before anything is published.
+Optional: add yourself as a required reviewer on the `production` environment to get a confirmation click before anything is published.
 
 ## If a release goes wrong
 

@@ -67,7 +67,9 @@ jobs:
     # Runs for a new version, or when started by hand to retry a failed upload.
     if: needs.build.outputs.is_new == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    environment: chrome-web-store
+    environment:
+      name: production
+      url: https://github.com/${{ github.repository }}/releases/tag/v${{ needs.build.outputs.version }}
     steps:
       - uses: actions/download-artifact@v4
         with:
