@@ -1,0 +1,47 @@
+name: Bug report
+description: Something isn't working the way it should
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+      placeholder: "I typed ABC-123 and pressed Enter. I expected the issue to open in a new tab, but..."
+    validations:
+      required: true
+  - type: input
+    id: typed
+    attributes:
+      label: What did you type or paste?
+      description: The exact text, if the problem is about recognising an issue key. Change the project name if it is private.
+  - type: dropdown
+    id: jira
+    attributes:
+      label: Jira type
+      options:
+        - Jira Cloud (something.atlassian.net)
+        - Jira Server / Data Center (self-hosted)
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Jira Jump version
+      description: Shown at the bottom of the extension's settings.
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and operating system
+      placeholder: "Chrome 142 on macOS 15"
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Screenshots help. To see errors, right-click the popup and choose Inspect, then look at the Console tab.

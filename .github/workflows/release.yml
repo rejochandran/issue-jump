@@ -1,0 +1,107 @@
+name: Release
+
+# A push to main with a new manifest version tags it, creates a GitHub release
+# and publishes to the Chrome Web Store. See docs/releasing.md.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      is_new: ${{ steps.version.outputs.is_new }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Read version
+        id: version
+        run: |
+          version=$(node -p "require('./extension/manifest.json').version")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if git rev-parse -q --verify "refs/tags/v$version" >/dev/null; then
+            echo "is_new=false" >> "$GITHUB_OUTPUT"
+            echo "v$version is already released." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "is_new=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - run: npm test
+      - run: npm run check
+      - run: npm run build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jira-jump-release
+          path: dist/*.zip
+
+      - name: Create GitHub release
+        if: steps.version.outputs.is_new == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          # Release notes are this version's section of the changelog.
+          awk -v v="$VERSION" '$0 ~ "^## \\[" v "\\]" {on=1; next} /^## \[/ {on=0} /^\[.*\]: http/ {on=0} on' CHANGELOG.md > notes.md
+          gh release create "v$VERSION" dist/*.zip --target "$GITHUB_SHA" --title "v$VERSION" --notes-file notes.md --latest
+
+  publish:
+    name: Chrome Web Store
+    needs: build
+    # Runs for a new version, or when started by hand to retry a failed upload.
+    if: needs.build.outputs.is_new == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment: chrome-web-store
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: jira-jump-release
+
+      - name: Upload and publish
+        env:
+          EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
+          CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
+        run: |
+          if [ -z "$EXTENSION_ID" ] || [ -z "$CLIENT_ID" ] || [ -z "$CLIENT_SECRET" ] || [ -z "$REFRESH_TOKEN" ]; then
+            echo "::warning::Chrome Web Store secrets are not set, so nothing was published. See docs/releasing.md."
+            echo "Skipped: store secrets are not configured." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          zip=$(ls jira-jump-*.zip | head -n 1)
+
+          token=$(curl -sS --fail-with-body https://oauth2.googleapis.com/token \
+            -d client_id="$CLIENT_ID" -d client_secret="$CLIENT_SECRET" \
+            -d refresh_token="$REFRESH_TOKEN" -d grant_type=refresh_token | jq -r .access_token)
+          if [ -z "$token" ] || [ "$token" = "null" ]; then echo "::error::Could not get an access token."; exit 1; fi
+          echo "::add-mask::$token"
+
+          upload=$(curl -sS -X PUT -T "$zip" \
+            -H "Authorization: Bearer $token" -H "x-goog-api-version: 2" \
+            "https://www.googleapis.com/upload/chromewebstore/v1.1/items/$EXTENSION_ID")
+          echo "$upload" | jq '{uploadState, itemError}'
+          [ "$(echo "$upload" | jq -r .uploadState)" = "SUCCESS" ] || { echo "::error::Upload failed."; exit 1; }
+
+          publish=$(curl -sS -X POST -H "Content-Length: 0" \
+            -H "Authorization: Bearer $token" -H "x-goog-api-version: 2" \
+            "https://www.googleapis.com/chromewebstore/v1.1/items/$EXTENSION_ID/publish")
+          echo "$publish" | jq '{status, statusDetail}'
+          echo "$publish" | jq -e '.status | index("OK") or index("ITEM_PENDING_REVIEW")' >/dev/null || { echo "::error::Publish failed."; exit 1; }
+          echo "Submitted $zip to the Chrome Web Store." >> "$GITHUB_STEP_SUMMARY"

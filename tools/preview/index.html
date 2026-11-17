@@ -1,0 +1,19 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Jira Jump preview</title>
+<style>
+  body { margin: 0; padding: 32px; font: 14px system-ui, sans-serif; background: #e9ebef; color: #1d2026; }
+  @media (prefers-color-scheme: dark) { body { background: #111214; color: #e7e8eb; } }
+  h1 { font-size: 15px; margin: 0 0 4px; } p { margin: 0 0 24px; opacity: .7; }
+  .grid { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
+  figure { margin: 0; } figcaption { margin-bottom: 8px; font-size: 12px; opacity: .7; }
+  iframe { display: block; width: 400px; height: 480px; border: 0; border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,.18); background: transparent; }
+</style>
+<h1>Jira Jump preview</h1>
+<p>Fake data, fake Chrome API. Tab opens are logged to the console instead of happening.</p>
+<div class="grid">
+  <figure><figcaption>default</figcaption><iframe src="/popup.html?scene=default"></iframe></figure>
+  <figure><figcaption>empty, on a new tab</figcaption><iframe src="/popup.html?scene=empty&tab=blank"></iframe></figure>
+  <figure><figcaption>setup (no site found)</figcaption><iframe src="/popup.html?scene=setup"></iframe></figure>
+  <figure><figcaption>signed out</figcaption><iframe src="/popup.html?scene=signedout"></iframe></figure>
+</div>

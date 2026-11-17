@@ -1,0 +1,6 @@
+# Shows the "Sponsor" button on the repository page.
+# Other platforms can be added here, for example:
+#   buy_me_a_coffee: your-username
+#   ko_fi: your-username
+#   custom: ["https://example.com/donate"]
+github: [rejochandran]

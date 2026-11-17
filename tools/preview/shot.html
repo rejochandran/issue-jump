@@ -1,0 +1,42 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Store screenshot</title>
+<!-- 1280x800 frame for Chrome Web Store screenshots. See scripts/screenshots.sh -->
+<style>
+  html, body { margin: 0; width: 1280px; height: 800px; overflow: hidden; }
+  body {
+    position: relative; display: grid; grid-template-columns: 1fr 660px; align-items: center;
+    font-family: system-ui, -apple-system, sans-serif; color: #fff;
+    background: linear-gradient(135deg, #0a3d91 0%, #0c5ad6 55%, #2684ff 100%);
+  }
+  /* Oversized chevrons from the icon, as a quiet backdrop. */
+  .bg { position: absolute; inset: 0; overflow: hidden; }
+  .bg svg { position: absolute; right: -120px; top: -140px; width: 1080px; height: 1080px; opacity: .09; }
+  .copy { position: relative; padding: 0 24px 0 84px; }
+  .tag { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 26px; font-size: 19px; font-weight: 600; letter-spacing: .01em; opacity: .92; }
+  .tag img { width: 30px; height: 30px; padding: 7px; border-radius: 11px; background: #fff; }
+  h1 { margin: 0 0 20px; font-size: 62px; line-height: 1.04; letter-spacing: -0.03em; font-weight: 750; }
+  p { margin: 0; max-width: 470px; font-size: 24px; line-height: 1.45; color: rgba(255,255,255,.84); }
+  .stage { position: relative; display: grid; place-items: center; height: 100%; }
+  iframe {
+    width: 400px; border: 0; border-radius: 12px; background: #1c1d20; zoom: 1.42;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.10), 0 2px 6px rgba(3,20,60,.35), 0 30px 70px rgba(3,20,60,.55);
+  }
+</style>
+<div class="bg"><svg viewBox="0 0 128 128"><path d="M8 12h30l38 52-38 52H8l38-52z" fill="#fff"/><path d="M52 12h30l38 52-38 52H52l38-52z" fill="#fff"/></svg></div>
+<div class="copy">
+  <div class="tag"><img src="/icons/icon.svg" alt="">Jira Jump</div>
+  <h1 id="h"></h1><p id="p"></p>
+</div>
+<div class="stage"><iframe id="f" scrolling="no"></iframe></div>
+<script>
+  const q = new URLSearchParams(location.search);
+  document.getElementById('h').textContent = q.get('h') || '';
+  document.getElementById('p').textContent = q.get('p') || '';
+  const f = document.getElementById('f');
+  q.delete('h'); q.delete('p');
+  f.src = `/popup.html?${q}`;
+  // Same origin, so the frame can be sized to the popup's real height once it has rendered.
+  const fit = () => { f.style.height = `${f.contentDocument.body.scrollHeight}px`; };
+  f.addEventListener('load', () => { fit(); setInterval(fit, 200); });
+</script>

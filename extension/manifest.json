@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "Jira Jump",
+  "short_name": "Jira Jump",
+  "version": "1.0.0",
+  "description": "Open any Jira issue in one keystroke. Type or paste a key, a number, a link or a few words and jump straight to it.",
+  "homepage_url": "https://github.com/rejochandran/jira-jump",
+  "minimum_chrome_version": "116",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Jira Jump",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "omnibox": { "keyword": "j" },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": { "default": "Alt+J" },
+      "description": "Open Jira Jump"
+    }
+  },
+  "permissions": ["tabs", "storage", "contextMenus"],
+  "optional_permissions": ["clipboardRead"],
+  "host_permissions": ["https://*.atlassian.net/*"],
+  "optional_host_permissions": ["https://*/*", "http://*/*"]
+}

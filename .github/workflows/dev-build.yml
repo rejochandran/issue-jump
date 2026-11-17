@@ -1,0 +1,45 @@
+name: Dev build
+
+# Every push to dev produces an installable "Jira Jump (dev)" zip for testing.
+on:
+  push:
+    branches: [dev]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dev-build
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm test
+      - run: npm run check
+      - run: npm run build:dev
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jira-jump-dev
+          path: dist/*.zip
+          retention-days: 30
+
+      - name: Update the rolling dev-latest pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp dist/*.zip jira-jump-dev.zip
+          gh release delete dev-latest --cleanup-tag --yes 2>/dev/null || true
+          gh release create dev-latest jira-jump-dev.zip \
+            --target "$GITHUB_SHA" \
+            --prerelease \
+            --title "Dev build" \
+            --notes "Latest build of the \`dev\` branch (${GITHUB_SHA::7}). For testing only.
+
+          Unzip it, open \`chrome://extensions\`, turn on Developer mode and choose **Load unpacked**. It installs as \"Jira Jump (dev)\" next to the store version."

@@ -1,0 +1,24 @@
+name: Feature request
+description: Suggest an idea or improvement
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: Describe the situation, not just the solution. What slows you down today?
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would help?
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Good to know
+      options:
+        - label: This would need a new browser permission
+        - label: I'd like to work on this myself
