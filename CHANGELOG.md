@@ -5,6 +5,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-11-17
+
+### Fixed
+
+- Bare numbers did nothing when Jira had no default project yet. The default is now picked up from the Jira page you have open, or from the issues you viewed recently, and when it still can't be worked out the popup offers to set it.
+
 ## [1.1.0] - 2026-11-17
 
 ### Added
@@ -45,6 +51,7 @@ First public release.
 - Support for Jira Cloud and, with permission, Jira Server / Data Center.
 - Settings for the Jira site, default project, where issues open, previews, clipboard prefill and a custom issue link.
 
-[Unreleased]: https://github.com/rejochandran/issue-jump/compare/v1.1.0...dev
+[Unreleased]: https://github.com/rejochandran/issue-jump/compare/v1.1.1...dev
+[1.1.1]: https://github.com/rejochandran/issue-jump/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/rejochandran/issue-jump/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/rejochandran/issue-jump/releases/tag/v1.0.0

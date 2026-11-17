@@ -35,7 +35,7 @@
   const hist = (tracker, key, url, issue, pinned, ts) => ({ tracker, key, url, summary: issue.summary || issue.title, status: issue.status || '', statusColor: issue.statusColor || '', pinned, ts });
 
   const store = {
-    sync: scene === 'setup' ? {} : scene === 'single' || scene === 'signedout' ? { trackers: TRACKERS.slice(0, 1), numbersTo: 'jira' } : { trackers: TRACKERS, numbersTo: 'jira' },
+    sync: scene === 'setup' ? {} : scene === 'noproject' ? { trackers: [{ ...TRACKERS[0], project: '' }, TRACKERS[1]], numbersTo: 'jira' } : scene === 'single' || scene === 'signedout' ? { trackers: TRACKERS.slice(0, 1), numbersTo: 'jira' } : { trackers: TRACKERS, numbersTo: 'jira' },
     local: {
       welcomed: scene !== 'empty',
       tokens: { linear: 'lin_api_demo' },
@@ -76,7 +76,7 @@
       update: async (_id, o) => { log('tabs.update', o.url); },
     },
     permissions: { contains: async () => true, request: async () => true },
-    runtime: { sendMessage: async () => {}, getManifest: () => ({ version: '1.1.0' }), getURL: (p) => `/${p}` },
+    runtime: { sendMessage: async () => {}, getManifest: () => ({ version: '1.1.1' }), getURL: (p) => `/${p}` },
   };
   window.close = () => log('window.close');
 
@@ -108,6 +108,7 @@
     if (scene === 'signedout') return json({}, 401);
     const path = url.pathname.replace(/^\/rest\/api\/\d\//, '');
     if (path === 'myself') return json({ displayName: 'Maya Okafor' });
+    if (path.startsWith('issue/picker') && !q && params.get('guess') === '0') return json({ sections: [] });
     if (path.startsWith('issue/picker')) {
       const hits = ISSUES.filter((i) => `${i.key} ${i.summary}`.toLowerCase().includes(q));
       return json({ sections: [{ issues: hits.map((i) => ({ key: i.key, summaryText: i.summary })) }] });

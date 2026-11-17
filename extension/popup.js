@@ -139,6 +139,7 @@ async function activate(row, mode) {
   if (!row) return;
   if (row.kind === 'issue') return openIssues([row.ref], mode);
   if (row.kind === 'many') return openIssues(row.refs, mode);
+  if (row.kind === 'setup') return editTracker(trackerOf(row.tracker));
   await openUrls([row.url], { mode, tab: state.tab });
   window.close();
 }
@@ -232,6 +233,16 @@ function buildRows() {
       if (state.remote.projects.length) {
         sections.push({ label: 'Projects', rows: state.remote.projects.map((p) => ({ kind: 'link', key: p.key, title: p.name, meta: 'Project', url: p.url })) });
       }
+    }
+  }
+
+  // A bare number with nowhere to go: say why, and offer the one setting that fixes it.
+  const number = raw.match(/^[#!]?(\d{1,7})$/);
+  if (number && !items.length) {
+    const t = active().find((x) => x.id === state.settings.numbersTo && providerOf(x).fromNumber) || active().find((x) => providerOf(x).fromNumber);
+    if (t) {
+      const what = providerOf(t).fields.find((f) => ['project', 'repo', 'team'].includes(f.name))?.label.toLowerCase() || 'default project';
+      sections.push({ rows: [{ kind: 'setup', tracker: t.id, lead: 'chevron', title: `Set a ${what} to open ${number[1]}`, meta: titleOf(t) }] });
     }
   }
 
@@ -432,6 +443,21 @@ async function hydrate() {
     changed = true;
   }));
   if (changed) render();
+}
+
+/** Fill in a missing default project from what the user has been viewing, so bare numbers work unasked. */
+async function guessDefaults() {
+  const lacking = live().filter((t) => providerOf(t).guessProject && !projectOf(t));
+  if (!lacking.length) return;
+  let changed = false;
+  await Promise.all(lacking.map(async (t) => {
+    const project = await providerOf(t).guessProject(t);
+    if (project && !projectOf(t)) { t.project = project; changed = true; }
+  }));
+  if (!changed) return;
+  await saveTrackers(state.settings);
+  renderSettings();
+  if (app.dataset.view === 'main') onQuery();
 }
 
 async function loadMine() {
@@ -663,6 +689,7 @@ function backToMain() {
   onQuery();
   checkSessions();
   hydrate();
+  guessDefaults();
 }
 
 async function update(patch, message = 'Saved') {
@@ -941,6 +968,7 @@ async function start() {
   if (state.list === 'mine') loadMine();
   checkSessions();
   hydrate();
+  guessDefaults();
   tryClipboard();
 }
 

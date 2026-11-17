@@ -51,6 +51,17 @@ test('Jira: issue, missing issue, search, mine, whoami', async () => {
   assert.deepEqual(await p.whoami(jira), { name: 'Maya Okafor' });
 });
 
+test('Jira: guesses the default project from recently viewed issues', async () => {
+  const p = providerOf('jira');
+  reply('/issue/picker?query=', { sections: [{ issues: [{ key: 'WEB-1' }, { key: 'OPS-2' }, { key: 'WEB-9' }] }] });
+  assert.equal(await p.guessProject(jira), 'WEB');
+  routes = [];
+  reply('/issue/picker?query=', { sections: [] });
+  assert.equal(await p.guessProject(jira), '');
+  routes = [];
+  assert.equal(await p.guessProject(jira), ''); // signed out or offline
+});
+
 test('Jira: signed out, and the Server fallback for Assigned to me', async () => {
   const p = providerOf('jira');
   reply('/myself', {}, 401);

@@ -50,9 +50,24 @@ export default {
 
   /** A tab on <name>.atlassian.net is Jira Cloud. Elsewhere a /browse/KEY-1 path only hints at Jira. */
   detect(u) {
-    if (u.protocol === 'https:' && /^[a-z0-9-]+\.atlassian\.net$/i.test(u.hostname)) return { site: u.origin, trusted: true };
-    if (/\/browse\/[A-Z][A-Z0-9_]+-\d+/.test(u.pathname)) return { site: u.origin, trusted: false };
+    // The project in view, when the address shows one, becomes the default for bare numbers.
+    const seen = `${u.pathname}${u.search}`.match(/(?:\/browse\/|selectedIssue=)([A-Z][A-Z0-9_]{0,14})-\d+|\/projects\/([A-Z][A-Z0-9_]{0,14})(?:[/?]|$)/);
+    const project = seen ? seen[1] || seen[2] : '';
+    if (u.protocol === 'https:' && /^[a-z0-9-]+\.atlassian\.net$/i.test(u.hostname)) return { site: u.origin, project, trusted: true };
+    if (/\/browse\/[A-Z][A-Z0-9_]+-\d+/.test(u.pathname)) return { site: u.origin, project, trusted: false };
     return null;
+  },
+
+  /** The project the user works in most, judged by the issues they viewed recently. */
+  async guessProject(t, signal) {
+    const r = await api(t, 'api/2/issue/picker?query=', signal);
+    if (!r.ok) return '';
+    const counts = {};
+    for (const i of (r.data.sections || []).flatMap((s) => s.issues || [])) {
+      const prefix = String(i.key || '').split('-')[0];
+      if (prefix) counts[prefix] = (counts[prefix] || 0) + 1;
+    }
+    return Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] || '';
   },
 
   async whoami(t, signal) {

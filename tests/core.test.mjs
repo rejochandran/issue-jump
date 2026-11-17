@@ -96,15 +96,26 @@ test('detects trackers from open tabs', () => {
   ]);
   assert.deepEqual(found.map((f) => [f.type, f.trusted]), [['github', true], ['jira', true], ['linear', true], ['gitlab', true]]);
   assert.equal(found[0].repo, 'acme/web'); // filled in from the second GitHub tab
+  assert.equal(found[1].project, ''); // no project visible in that Jira address
   assert.equal(found[2].workspace, 'acme');
   assert.equal(found[2].team, 'ENG');
   assert.equal(found[3].project, 'acme/api');
   assert.deepEqual(detectTrackers([{ url: 'https://acme.atlassian.net/x' }], [jira]), []); // already added
 });
 
+test('Jira: the project in view becomes the default', () => {
+  const project = (url) => detectTrackers([{ url }])[0].project;
+  assert.equal(project('https://acme.atlassian.net/browse/WEB-12'), 'WEB');
+  assert.equal(project('https://acme.atlassian.net/jira/software/projects/OPS/boards/3'), 'OPS');
+  assert.equal(project('https://acme.atlassian.net/jira/software/c/projects/OPS/boards/3?selectedIssue=OPS-9'), 'OPS');
+  assert.equal(project('https://acme.atlassian.net/jira/your-work'), '');
+  // Seen on a later tab, it still fills in.
+  assert.equal(detectTrackers([{ url: 'https://acme.atlassian.net/jira/your-work', active: true }, { url: 'https://acme.atlassian.net/browse/WEB-1' }])[0].project, 'WEB');
+});
+
 test('only unmistakable addresses are trusted', () => {
   // Self-hosted Jira, or an impostor: a suggestion, never adopted.
-  assert.deepEqual(detectTrackers([{ url: 'https://jira.corp.example/browse/OPS-4', active: true }]), [{ type: 'jira', site: 'https://jira.corp.example', trusted: false }]);
+  assert.deepEqual(detectTrackers([{ url: 'https://jira.corp.example/browse/OPS-4', active: true }]), [{ type: 'jira', site: 'https://jira.corp.example', project: 'OPS', trusted: false }]);
   // Two Jira Cloud sites: no safe way to pick.
   assert.deepEqual(detectTrackers([{ url: 'https://one.atlassian.net/' }, { url: 'https://two.atlassian.net/' }]).map((f) => f.trusted), [false, false]);
   for (const url of ['https://acme.atlassian.net.evil.example/x', 'https://evil-atlassian.net/x', 'http://acme.atlassian.net/x', 'https://a.b.atlassian.net/x', 'https://github.com.evil.example/a/b', 'http://github.com/a/b', 'https://notlinear.app/acme', 'https://gitlab.com.evil.example/a/b']) {
