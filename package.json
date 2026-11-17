@@ -1,8 +1,8 @@
 {
   "name": "issue-jump",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
-  "description": "Chrome extension that opens any Jira issue in one keystroke.",
+  "description": "Chrome extension that opens any issue in one keystroke, across Jira, GitHub, GitLab, Linear and more.",
   "license": "MIT",
   "type": "module",
   "repository": { "type": "git", "url": "git+https://github.com/rejochandran/issue-jump.git" },

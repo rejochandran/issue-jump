@@ -10,7 +10,7 @@
 
 - [ ] This pull request targets `dev`
 - [ ] `npm test` and `npm run check` pass
-- [ ] Tests added or updated for changes to `extension/lib/jira.js`
+- [ ] Tests added or updated for changes to `extension/lib/`
 - [ ] `CHANGELOG.md` has a line under "Unreleased" for anything users will notice
 - [ ] Checked in light and dark theme, and with the keyboard only (UI changes)
 - [ ] No new permissions, dependencies or network hosts (or they were agreed in an issue first)

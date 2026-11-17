@@ -6,7 +6,8 @@ Thanks for taking the time. Bug reports, ideas and pull requests are all welcome
 
 - **Report a bug** or **suggest a feature** using the [issue templates](https://github.com/rejochandran/issue-jump/issues/new/choose).
 - **Pick up an issue.** Ones labelled [`good first issue`](https://github.com/rejochandran/issue-jump/labels/good%20first%20issue) are a good start. Comment on it first so two people don't do the same work.
-- **Test on Jira Server / Data Center.** Most development happens against Jira Cloud, so reports from self-hosted sites are especially useful.
+- **Add a tracker.** Each one is a single small file; [docs/providers.md](docs/providers.md) explains how.
+- **Test on trackers we can't.** Jira Server / Data Center, self-hosted GitLab and less common setups are where reports help most.
 
 For anything larger than a small fix, open an issue to talk it through before writing code.
 
@@ -43,7 +44,7 @@ npm test        # must pass
 npm run check   # must pass
 ```
 
-- Add or update tests in `tests/` when you change anything in `extension/lib/jira.js`.
+- Add or update tests in `tests/` when you change anything in `extension/lib/`.
 - Add a line under `## [Unreleased]` in `CHANGELOG.md` for anything a user would notice.
 - Test by hand in Chrome: light and dark theme, keyboard only, and a blank tab versus a normal page.
 - Keep the pull request to one topic. Smaller ones are reviewed faster.
@@ -51,10 +52,10 @@ npm run check   # must pass
 ## Code guidelines
 
 - **No dependencies, no build step.** Plain ES modules, HTML and CSS that Chrome runs as written. This keeps the extension small and easy to audit.
-- **Never put outside text into `innerHTML`.** Anything from Jira, a web page or the user goes through `textContent`. `innerHTML` is only for the static SVG strings already in the code.
-- **No network requests except to the user's configured Jira site.** No analytics, no third-party hosts, no remote code.
+- **Never put outside text into `innerHTML`.** Anything from a tracker, a web page or the user goes through `textContent`. `innerHTML` is only for the static SVG strings already in the code.
+- **No network requests except to a tracker the user has connected**, and only through `request()` in `lib/http.js`. No analytics, no third-party hosts, no remote code.
 - **Permissions are a promise to users.** Do not add one without discussing it in an issue first. A new permission also means updating `PRIVACY.md`, `store/listing.md` and `scripts/check.mjs`.
-- **Keep logic testable.** Parsing and URL building live in `extension/lib/jira.js` as pure functions with no `chrome.*` calls.
+- **Keep logic testable.** Parsing, routing and URL building are pure functions in `extension/lib/core.js` and the providers, with no `chrome.*` calls.
 - Follow the style around you: two spaces, single quotes, semicolons. `.editorconfig` covers the basics.
 - UI text is short, plain and sentence case.
 

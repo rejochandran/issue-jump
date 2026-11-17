@@ -53,26 +53,14 @@
       </header>
 
       <div class="rows">
-        <h2>Jira</h2>
-        <div class="row stack">
-          <label for="sSite">Site</label>
-          <input id="sSite" type="text" spellcheck="false" placeholder="yourcompany.atlassian.net">
-          <p class="sub" id="sSiteStatus"></p>
-        </div>
-        <div class="row">
-          <div>
-            <label for="sProject">Default project</label>
-            <p class="sub">Lets you type just the number.</p>
-          </div>
-          <input id="sProject" type="text" spellcheck="false" maxlength="15" class="short" placeholder="ABC">
-        </div>
-        <details class="row stack adv">
-          <summary>Custom issue link</summary>
-          <input id="sTemplate" type="text" spellcheck="false">
-          <p class="sub" id="sTemplateHelp">Use <code>{key}</code> where the issue key goes. Leave empty for the default.</p>
-        </details>
+        <h2>Trackers</h2>
+        <div class="trackers" id="trackerList"></div>
+        <button type="button" class="trow add" id="addTracker">
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M8 3.5v9M3.5 8h9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>Add a tracker</span>
+        </button>
 
-        <h2>Behaviour</h2>
+        <h2>Opening</h2>
         <div class="row">
           <div>
             <span class="label" id="sModeLabel">Open issues in</span>
@@ -84,10 +72,16 @@
             <button type="button" data-mode="current" role="radio">This tab</button>
           </div>
         </div>
+        <div class="row" id="numbersRow" hidden>
+          <label for="sNumbers">Bare numbers go to</label>
+          <select id="sNumbers"></select>
+        </div>
+
+        <h2>Options</h2>
         <label class="row" for="sPreview">
           <div>
             <span class="label">Previews and search</span>
-            <p class="sub">Look up issues with your Jira login as you type.</p>
+            <p class="sub">Look up issues in your trackers as you type.</p>
           </div>
           <input type="checkbox" class="switch" id="sPreview">
         </label>
@@ -98,8 +92,6 @@
           </div>
           <input type="checkbox" class="switch" id="sClipboard">
         </label>
-
-        <h2>More</h2>
         <div class="row">
           <span class="label">Keyboard shortcut</span>
           <button type="button" class="btn" id="shortcuts">Change</button>
@@ -119,16 +111,46 @@
       </footer>
     </section>
 
-    <!-- First run, only when no Jira site could be found -->
-    <section class="view" id="viewSetup">
-      <form class="setup" id="setupForm" autocomplete="off">
-        <img src="icons/icon.svg" alt="" width="40" height="40">
-        <h1>Where is your Jira?</h1>
-        <p>Paste any link from it, or type the address.</p>
-        <input id="setupSite" type="text" spellcheck="false" placeholder="yourcompany.atlassian.net" aria-label="Jira address">
-        <p class="err" id="setupError" hidden></p>
-        <button type="submit" class="btn primary">Continue</button>
-        <p class="fine">Nothing leaves your browser. Previews use the Jira login you already have.</p>
+    <!-- Choose a tracker to add. Also the first screen when none could be found. -->
+    <section class="view" id="viewAdd">
+      <header class="head" id="addHead">
+        <button type="button" class="back" id="addBack" aria-label="Back">
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <h1>Add a tracker</h1>
+      </header>
+      <div class="welcome" id="welcome" hidden>
+        <img src="icons/icon.svg" alt="" width="36" height="36">
+        <h1>Where do your issues live?</h1>
+        <p>Pick one to start. You can add more later.</p>
+      </div>
+      <div class="rows">
+        <div id="foundBlock" hidden>
+          <h2>Found in your tabs</h2>
+          <div class="trackers" id="foundList"></div>
+          <h2>Or choose</h2>
+        </div>
+        <div class="trackers" id="typeList"></div>
+      </div>
+    </section>
+
+    <!-- One tracker's details -->
+    <section class="view" id="viewTracker">
+      <header class="head">
+        <button type="button" class="back" id="trackerBack" aria-label="Back">
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <h1 id="trackerTitle"></h1>
+        <input type="checkbox" class="switch" id="tEnabled" title="Use this tracker" aria-label="Use this tracker">
+      </header>
+      <form class="rows" id="trackerForm" autocomplete="off">
+        <div id="trackerFields"></div>
+        <p class="sub" id="trackerStatus"></p>
+        <p class="sub bad" id="trackerError" hidden></p>
+        <div class="formfoot">
+          <button type="button" class="btn danger" id="trackerRemove">Remove</button>
+          <button type="submit" class="btn primary" id="trackerSave">Save</button>
+        </div>
       </form>
     </section>
 

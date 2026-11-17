@@ -4,22 +4,35 @@
 [![Release](https://img.shields.io/github/v/release/rejochandran/issue-jump)](https://github.com/rejochandran/issue-jump/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-A Chrome extension that opens any Jira issue in one keystroke. Press `Alt+J`, type `123`, hit Enter.
+A Chrome extension that jumps to any issue in one keystroke. Press `Alt+J`, type `123`, hit Enter.
 
-![The Issue Jump popup showing recent issues](store/screenshots/1-recent.png)
+It works with Jira, GitHub, GitLab and Linear, and with any other tracker you give it a link pattern for.
+
+![The Issue Jump popup showing recent issues from several trackers](store/screenshots/1-recent.png)
 
 ## What it does
 
-- **Understands whatever you paste.** `ABC-123`, `abc123`, `abc 123`, just `123`, a Jira link, a branch name, or several keys at once.
+- **Understands whatever you paste.** `ABC-123`, `abc123`, just `123`, `owner/repo#45`, `!67`, a link, a branch name, or several at once.
+- **Routes it to the right tracker.** Use Jira at work and GitHub for open source in the same popup. It learns which project lives where.
 - **Opens in the right place.** A new tab normally, the current tab when it is blank. Hold `⌘`/`Ctrl` or `Shift` to choose.
-- **Shows the issue before you open it.** Summary and status appear as you type.
-- **Searches when you don't know the key.** Type a few words to search issue titles and projects, or jump to a full Jira search.
-- **Knows what you're looking at.** Issue keys in the current page's title or address (a pull request, a branch, a doc) are offered first.
-- **Keeps your recent and pinned issues**, plus a list of open issues assigned to you.
+- **Shows the issue before you open it.** Title and status appear as you type.
+- **Searches when you don't know the key.** Type a few words to search every connected tracker.
+- **Knows what you're looking at.** Issues mentioned in the current page's title or address are offered first.
+- **Keeps your recent and pinned issues**, plus the open issues assigned to you.
 - **Works from the address bar** (`j`, space, then a key) and from the right-click menu on selected text.
-- **Sets itself up.** If Jira is open in a tab, it finds your site on its own.
+- **Sets itself up.** Trackers open in your tabs are found and added on their own.
 
-It works with Jira Cloud out of the box and with Jira Server / Data Center after you allow access to your site. Support for GitHub, GitLab, Linear and other trackers is planned.
+## Trackers
+
+| Tracker | Jump | Previews and search | Assigned to me | Needs |
+|---|---|---|---|---|
+| Jira Cloud, Server, Data Center | ✓ | ✓ | ✓ | Being signed in to Jira |
+| GitHub issues and pull requests | ✓ | ✓ public repositories | with a token | A token only for private repositories |
+| GitLab issues and merge requests | ✓ | ✓ | ✓ | Being signed in to GitLab |
+| Linear | ✓ | with an API key | with an API key | An API key for anything beyond jumping |
+| Custom (Kaneo, Plane, YouTrack, Redmine, ...) | ✓ | | | A link pattern such as `https://tracker.example/issues/{key}` |
+
+Want another tracker built in? See [docs/providers.md](docs/providers.md); a provider is one small file.
 
 ## Install
 
@@ -37,11 +50,13 @@ It works with Jira Cloud out of the box and with Jira Server / Data Center after
 
 | You type | Issue Jump opens |
 |---|---|
-| `ABC-123`, `abc123`, `abc 123` | ABC-123 |
-| `123` | ABC-123, once ABC is your default project |
+| `ABC-123`, `abc123`, `abc 123` | ABC-123 in Jira or Linear |
+| `123` or `#123` | Issue 123 in your default project or repository |
+| `owner/repo#45` | That GitHub issue or pull request |
+| `group/project!67` or `!67` | That GitLab merge request |
 | a link or branch name containing a key | that issue |
-| `ABC-1, ABC-2, OPS-3` | all three, the first one focused |
-| `checkout bug` | matching issues and projects, or a Jira search |
+| `ABC-1, ABC-2, #45` | all three, the first one focused |
+| `checkout bug` | matching issues from every tracker, or a full search |
 
 | Key | Action |
 |---|---|
@@ -54,20 +69,20 @@ It works with Jira Cloud out of the box and with Jira Server / Data Center after
 | `Tab` (empty box) | Switch between Recent and Assigned to me |
 | `⌘`/`Ctrl` + `,` | Settings |
 
-The default project is learned from the first issue you open, and can be changed in settings.
+The default project is learned from the first issue you open. If a key could belong to two trackers, both are offered the first time and the choice is remembered.
 
 ## Privacy
 
-Issue Jump has no server, no analytics and no account. Your settings and recent issues stay in your browser. Previews and search talk only to your own Jira site, using the login you already have. See [PRIVACY.md](PRIVACY.md).
+Issue Jump has no server, no analytics and no account. Settings and recent issues stay in your browser. Previews and search talk only to the trackers you have connected. See [PRIVACY.md](PRIVACY.md).
 
 | Permission | Why |
 |---|---|
-| `tabs` | See whether the current tab is blank, read its title for issue keys, and find your Jira site on first run |
+| `tabs` | See whether the current tab is blank, read its title and address for issue references, and find your trackers on first run |
 | `storage` | Save settings and recent issues |
-| `contextMenus` | The right-click "Open in Jira" item |
+| `contextMenus` | The right-click "Jump to" item |
 | `*.atlassian.net` | Previews and search on Jira Cloud |
 | `clipboardRead` (optional) | Only if you turn on "Paste from clipboard" |
-| Other sites (optional) | Only your own Jira Server / Data Center address, when you add it |
+| Other sites (optional) | Asked for one at a time, only for a tracker you add: `api.github.com`, `gitlab.com`, `api.linear.app` or your own server |
 
 ## Development
 
@@ -81,11 +96,13 @@ npm run build     # dist/issue-jump-<version>.zip
 ```
 
 ```
-extension/        the extension itself; this folder is what ships
-  lib/jira.js     parsing, URLs, storage and Jira REST calls
-  popup.*         the popup
-  background.js   address bar, right-click menu
-tests/            unit tests for lib/jira.js
+extension/          the extension itself; this folder is what ships
+  lib/core.js       working out what was typed, settings, history, tabs
+  lib/http.js       the only place network requests are made
+  lib/providers/    one file per tracker
+  popup.*           the popup
+  background.js     address bar, right-click menu
+tests/              unit tests for lib/
 tools/preview/    browser preview with a fake chrome API
 scripts/          check, build and icon rendering
 store/            Chrome Web Store listing text and images
@@ -101,4 +118,4 @@ Issue Jump is free and will stay free. If it saves you time, you can help by sta
 
 [MIT](LICENSE)
 
-Issue Jump is an independent project. It is not affiliated with, endorsed by or sponsored by Atlassian. Jira is a trademark of Atlassian.
+Issue Jump is an independent project. It is not affiliated with, endorsed by or sponsored by Atlassian, GitHub, GitLab, Linear or any other tracker it works with. Their names are trademarks of their owners.

@@ -18,22 +18,43 @@
   ].map(([key, summary, status, statusColor, type, assignee]) => ({ key, summary, status, statusColor, type, assignee }));
   const PROJECTS = [{ key: 'WEB', name: 'Web App' }, { key: 'OPS', name: 'Operations' }, { key: 'MOB', name: 'Mobile' }];
 
+  const TRACKERS = [
+    { id: 'jira', type: 'jira', enabled: true, site: SITE, project: 'WEB', template: '' },
+    { id: 'github', type: 'github', enabled: true, repo: 'acme/web' },
+    { id: 'linear', type: 'linear', enabled: true, workspace: 'acme', team: 'ENG' },
+  ];
+  const GH = [
+    { number: 212, title: 'Keep theme after refresh', state: 'open', pull_request: {}, repository_url: 'https://api.github.com/repos/acme/web' },
+    { number: 198, title: 'Checkout: trim promo codes before validating', state: 'closed', pull_request: { merged_at: '2026-01-01' }, repository_url: 'https://api.github.com/repos/acme/web' },
+    { number: 187, title: 'Flaky checkout test on CI', state: 'open', repository_url: 'https://api.github.com/repos/acme/web' },
+  ];
+  const LINEAR = [
+    { identifier: 'ENG-58', title: 'Checkout latency regression', state: { name: 'In Progress', type: 'started' }, assignee: { name: 'Maya Okafor' } },
+    { identifier: 'ENG-61', title: 'Rate limit the promo endpoint', state: { name: 'Todo', type: 'unstarted' }, assignee: { name: 'Maya Okafor' } },
+  ];
+  const hist = (tracker, key, url, issue, pinned, ts) => ({ tracker, key, url, summary: issue.summary || issue.title, status: issue.status || '', statusColor: issue.statusColor || '', pinned, ts });
+
   const store = {
-    sync: scene === 'setup' ? {} : { site: SITE, project: 'WEB' },
+    sync: scene === 'setup' ? {} : scene === 'single' || scene === 'signedout' ? { trackers: TRACKERS.slice(0, 1), numbersTo: 'jira' } : { trackers: TRACKERS, numbersTo: 'jira' },
     local: {
-      siteConfirmed: scene !== 'empty',
-      history: scene === 'default' || scene === 'signedout' ? [
-        { ...ISSUES[0], pinned: true, ts: now - 50 * min },
-        { ...ISSUES[1], pinned: false, ts: now - 4 * min },
-        { ...ISSUES[4], pinned: false, ts: now - 3 * 60 * min },
-        { ...ISSUES[3], pinned: false, ts: now - 26 * 60 * min },
-        { ...ISSUES[7], pinned: false, ts: now - 3 * 24 * 60 * min },
-      ] : [],
+      welcomed: scene !== 'empty',
+      tokens: { linear: 'lin_api_demo' },
+      history: scene === 'empty' || scene === 'setup' ? [] : [
+        hist('jira', 'WEB-412', `${SITE}/browse/WEB-412`, ISSUES[0], true, now - 50 * min),
+        ...(scene === 'default' ? [
+          hist('github', 'acme/web#198', 'https://github.com/acme/web/issues/198', { title: GH[1].title, status: 'Merged', statusColor: 'green' }, false, now - 2 * min),
+          hist('linear', 'ENG-58', 'https://linear.app/acme/issue/ENG-58', { title: LINEAR[0].title, status: 'In Progress', statusColor: 'yellow' }, false, now - 40 * min),
+        ] : []),
+        hist('jira', 'WEB-398', `${SITE}/browse/WEB-398`, ISSUES[1], false, now - 4 * min),
+        hist('jira', 'OPS-88', `${SITE}/browse/OPS-88`, ISSUES[4], false, now - 3 * 60 * min),
+        hist('jira', 'WEB-377', `${SITE}/browse/WEB-377`, ISSUES[3], false, now - 26 * 60 * min),
+      ],
     },
   };
   const area = (name) => ({
     get: async (defaults) => ({ ...(defaults && typeof defaults === 'object' ? defaults : {}), ...store[name] }),
     set: async (patch) => { Object.assign(store[name], patch); },
+    remove: async (keys) => { [].concat(keys).forEach((k) => delete store[name][k]); },
   });
 
   const blank = params.get('tab') === 'blank';
@@ -45,13 +66,17 @@
   window.chrome = {
     storage: { sync: area('sync'), local: area('local') },
     tabs: {
-      query: async (q) => (q && q.active ? [activeTab] : scene === 'setup' ? [activeTab] : [activeTab, { url: `${SITE}/jira/your-work`, active: false, lastAccessed: now }]),
+      // "setup" has no tracker tabs open; "found" has a self-hosted one that must be confirmed.
+      query: async (q) => (q && q.active ? [activeTab]
+        : scene === 'setup' && params.get('found') ? [{ url: 'https://newtab.example/', active: true }, { url: 'https://jira.corp.example/browse/OPS-4', lastAccessed: now }]
+        : scene === 'setup' ? [{ url: 'https://example.com/', active: true }]
+        : [activeTab, { url: `${SITE}/jira/your-work`, active: false, lastAccessed: now }, ...(scene === 'single' ? [{ url: 'https://gitlab.com/acme/api/-/issues', lastAccessed: now - 5 }] : [])]),
       getCurrent: async () => undefined,
       create: async (o) => { log('tabs.create', o.url, o.active === false ? '(background)' : ''); return { index: 1 }; },
       update: async (_id, o) => { log('tabs.update', o.url); },
     },
     permissions: { contains: async () => true, request: async () => true },
-    runtime: { sendMessage: async () => {}, getManifest: () => ({ version: '1.0.0' }), getURL: (p) => `/${p}` },
+    runtime: { sendMessage: async () => {}, getManifest: () => ({ version: '1.1.0' }), getURL: (p) => `/${p}` },
   };
   window.close = () => log('window.close');
 
@@ -61,11 +86,27 @@
 
   window.fetch = async (input, init) => {
     const url = new URL(String(input), location.href);
-    if (url.origin !== SITE) return realFetch(input, init);
     await new Promise((r) => setTimeout(r, 120));
+    const q = (url.searchParams.get('query') || url.searchParams.get('q') || '').toLowerCase();
+
+    if (url.origin === 'https://api.github.com') {
+      const path = url.pathname;
+      const one = path.match(/^\/repos\/acme\/web\/issues\/(\d+)$/);
+      if (one) { const hit = GH.find((i) => i.number === Number(one[1])); return hit ? json(hit) : json({}, 404); }
+      if (path === '/search/issues') { const words = q.replace(/repo:\S+|in:title/g, '').trim(); return json({ items: GH.filter((i) => i.title.toLowerCase().includes(words)) }); }
+      return json({}, 404);
+    }
+    if (url.origin === 'https://api.linear.app') {
+      const body = JSON.parse(init?.body || '{}');
+      if (body.query.includes('searchIssues')) return json({ data: { searchIssues: { nodes: LINEAR.filter((i) => i.title.toLowerCase().includes(String(body.variables.term).toLowerCase())) } } });
+      if (body.query.includes('assignedIssues')) return json({ data: { viewer: { assignedIssues: { nodes: LINEAR } } } });
+      if (body.query.includes('issue(')) return json({ data: { issue: LINEAR.find((i) => i.identifier === body.variables.id) || null } });
+      return json({ data: { viewer: { name: 'Maya Okafor' } } });
+    }
+    if (url.origin !== SITE) return realFetch(input, init);
+
     if (scene === 'signedout') return json({}, 401);
     const path = url.pathname.replace(/^\/rest\/api\/\d\//, '');
-    const q = (url.searchParams.get('query') || '').toLowerCase();
     if (path === 'myself') return json({ displayName: 'Maya Okafor' });
     if (path.startsWith('issue/picker')) {
       const hits = ISSUES.filter((i) => `${i.key} ${i.summary}`.toLowerCase().includes(q));
@@ -88,6 +129,9 @@
       input.value = q;
       input.dispatchEvent(new Event('input'));
     }
-    if (params.get('view') === 'settings') document.getElementById('openSettings').click();
+    const view = params.get('view');
+    if (view) document.getElementById('openSettings').click();
+    if (view === 'add') document.getElementById('addTracker').click();
+    if (view === 'tracker') document.querySelectorAll('#trackerList .trow')[Number(params.get('n') || 0)]?.click();
   }, 150));
 })();

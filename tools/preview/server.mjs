@@ -3,7 +3,8 @@
 //
 //   npm run preview            then open http://localhost:8765/
 //
-// Scenes: /popup.html?scene=default | empty | setup | signedout     (add &tab=blank for a new-tab page)
+// Scenes: /popup.html?scene=default | single | empty | setup | signedout
+// Extras: &tab=blank (a new-tab page), &q=text, &view=settings|add|tracker (&n=1), &found=1 with scene=setup
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { extname, join, normalize } from 'node:path';

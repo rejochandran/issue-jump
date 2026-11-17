@@ -20,5 +20,6 @@ body:
     attributes:
       label: Good to know
       options:
+        - label: This is a request to support another tracker
         - label: This would need a new browser permission
         - label: I'd like to work on this myself

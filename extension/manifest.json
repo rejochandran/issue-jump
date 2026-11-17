@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "Issue Jump",
   "short_name": "Issue Jump",
-  "version": "1.0.0",
-  "description": "Open any Jira issue in one keystroke. Type or paste a key, a number, a link or a few words and jump straight to it.",
+  "version": "1.1.0",
+  "description": "Jump to any issue in one keystroke. Type a key, number, link or a few words. Works with Jira, GitHub, GitLab, Linear and more.",
   "homepage_url": "https://github.com/rejochandran/issue-jump",
   "minimum_chrome_version": "116",
   "action": {

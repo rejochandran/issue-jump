@@ -16,13 +16,18 @@ body:
       label: What did you type or paste?
       description: The exact text, if the problem is about recognising an issue key. Change the project name if it is private.
   - type: dropdown
-    id: jira
+    id: tracker
     attributes:
-      label: Jira type
+      label: Tracker
       options:
-        - Jira Cloud (something.atlassian.net)
-        - Jira Server / Data Center (self-hosted)
-        - Not sure
+        - Jira Cloud
+        - Jira Server / Data Center
+        - GitHub
+        - GitLab.com
+        - GitLab self-hosted
+        - Linear
+        - Custom tracker
+        - Not about one tracker
     validations:
       required: true
   - type: input
