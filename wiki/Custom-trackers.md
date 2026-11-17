@@ -9,7 +9,7 @@ Any tracker that gives each issue its own address can be used: Kaneo, Plane, You
 | Assigned to me | Not available |
 | Needs | A link pattern |
 
-![The form for adding a custom tracker](images/tracker-custom.png)
+<img src="images/tracker-custom.png" alt="The form for adding a custom tracker" width="400">
 
 ## Setup
 

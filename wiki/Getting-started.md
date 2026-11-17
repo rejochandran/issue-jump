@@ -19,15 +19,15 @@ Open the popup with `Alt+J` or by clicking the icon.
 
 **If you have a tracker open in a tab**, Issue Jump recognises it and sets it up without asking. This happens for `github.com`, `gitlab.com`, `linear.app` and a single Jira Cloud site (`yourcompany.atlassian.net`). A strip at the top tells you what it found; **Review** takes you to settings.
 
-![The popup after first run, showing which trackers were set up](images/welcome.png)
+<img src="images/welcome.png" alt="The popup after first run, showing which trackers were set up" width="400">
 
 **If nothing is open**, you are asked where your issues live. Pick a tracker and fill in its short form.
 
-![The first-run screen listing the trackers to choose from](images/first-run.png)
+<img src="images/first-run.png" alt="The first-run screen listing the trackers to choose from" width="400">
 
 **If something looks like a tracker but can't be confirmed**, such as Jira on your company's own server, it is offered at the top for you to add with one click. Issue Jump never adds a self-hosted address on its own.
 
-![The first-run screen offering a self-hosted Jira found in a tab](images/first-run-found.png)
+<img src="images/first-run-found.png" alt="The first-run screen offering a self-hosted Jira found in a tab" width="400">
 
 ## Turning on previews
 

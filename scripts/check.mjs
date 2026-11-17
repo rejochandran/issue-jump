@@ -71,8 +71,14 @@ for (const page of pages) {
     const target = inner.split('|').pop().trim();
     if (!titles.has(target.toLowerCase())) fail(`wiki/${page} links to a page that does not exist: [[${inner}]]`);
   }
-  for (const [, image] of source.matchAll(/\]\((images\/[^)\s]+)\)/g)) {
+  for (const [, image] of source.matchAll(/(?:\]\(|<img src=")(images\/[^)\s"]+)/g)) {
     if (!existsSync(join(wiki, image))) fail(`wiki/${page} uses a missing image: ${image}`);
+  }
+  // Screenshots are captured at double size, so a plain markdown image shows twice as large as the real popup.
+  if (/!\[[^\]]*\]\(images\//.test(source)) fail(`wiki/${page} embeds a screenshot with markdown. Use <img src="images/…" alt="…" width="400"> so it shows at its real size.`);
+  for (const [tag] of source.matchAll(/<img src="images\/[^>]*>/g)) {
+    if (!/\swidth="\d+"/.test(tag)) fail(`wiki/${page} has a screenshot without a width: ${tag}`);
+    if (!/\salt="[^"]+"/.test(tag)) fail(`wiki/${page} has a screenshot without alt text: ${tag}`);
   }
 }
 for (const required of ['Home.md', '_Sidebar.md']) if (!pages.includes(required)) fail(`wiki/${required} is missing`);

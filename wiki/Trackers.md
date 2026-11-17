@@ -16,7 +16,7 @@ Trackers open in your tabs are added automatically on first run, and offered wit
 
 To add one by hand: **Settings → Add a tracker**, pick the type, fill in the form.
 
-![The list of tracker types](images/add-tracker.png)
+<img src="images/add-tracker.png" alt="The list of tracker types" width="400">
 
 ## Changing or removing a tracker
 

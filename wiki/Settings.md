@@ -2,7 +2,7 @@
 
 Open settings with the button at the bottom right of the popup, or `⌘`/`Ctrl` + `,`.
 
-![The settings screen](images/settings.png)
+<img src="images/settings.png" alt="The settings screen" width="400">
 
 ## Trackers
 
@@ -34,7 +34,7 @@ Whatever you choose, `⌘`/`Ctrl` + `Enter` forces a new tab and `Shift` + `Ente
 
 If a number does nothing because the tracker has no default project yet, the popup says so and Enter takes you to the setting.
 
-![The popup offering to set a default project](images/no-project.png)
+<img src="images/no-project.png" alt="The popup offering to set a default project" width="400">
 
 ## Options
 

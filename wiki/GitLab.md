@@ -9,7 +9,7 @@ Issues and merge requests on gitlab.com or your own GitLab server.
 | Assigned to me | ✓ |
 | Needs | Being signed in to GitLab in this browser |
 
-![The form for adding GitLab](images/tracker-gitlab.png)
+<img src="images/tracker-gitlab.png" alt="The form for adding GitLab" width="400">
 
 ## Setup
 

@@ -4,7 +4,7 @@ Issue Jump is a Chrome extension that takes you to any issue in one keystroke. P
 
 It works with **Jira**, **GitHub**, **GitLab** and **Linear**, and with any other tracker you can give a link pattern for.
 
-![The Issue Jump popup with recent issues from Jira, GitHub and Linear](images/popup.png)
+<img src="images/popup.png" alt="The Issue Jump popup with recent issues from Jira, GitHub and Linear" width="400">
 
 ## Start here
 
