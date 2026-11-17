@@ -1,0 +1,15 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Documentation screenshot</title>
+<!-- The popup alone on a flat key colour, so scripts/wiki-shots.sh can crop to it. -->
+<style>
+  html, body { margin: 0; background: #ff00ff; }
+  iframe { display: block; width: 400px; border: 0; background: #fff; }
+</style>
+<iframe id="f" scrolling="no"></iframe>
+<script>
+  const f = document.getElementById('f');
+  f.src = `/popup.html${location.search}`;
+  const fit = () => { f.style.height = `${f.contentDocument.body.scrollHeight}px`; };
+  f.addEventListener('load', () => { fit(); setInterval(fit, 200); });
+</script>

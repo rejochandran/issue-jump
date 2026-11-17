@@ -14,6 +14,7 @@
     "build:dev": "node scripts/build.mjs --dev",
     "preview": "node tools/preview/server.mjs",
     "icons": "sh scripts/icons.sh",
-    "screenshots": "sh scripts/screenshots.sh"
+    "screenshots": "sh scripts/screenshots.sh",
+    "wiki:shots": "sh scripts/wiki-shots.sh"
   }
 }

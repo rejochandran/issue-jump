@@ -34,6 +34,8 @@ It works with Jira, GitHub, GitLab and Linear, and with any other tracker you gi
 
 Want another tracker built in? See [docs/providers.md](docs/providers.md); a provider is one small file.
 
+**[Read the documentation](https://github.com/rejochandran/issue-jump/wiki)** for setup guides, every tracker, settings and troubleshooting.
+
 ## Install
 
 **Chrome Web Store:** coming soon.
@@ -94,6 +96,7 @@ npm test          # unit tests
 npm run check     # manifest, version and store-policy checks
 npm run preview   # the popup in a normal browser tab, with fake data
 npm run build     # dist/issue-jump-<version>.zip
+npm run wiki:shots # regenerate the screenshots in wiki/images
 ```
 
 ```
@@ -104,6 +107,7 @@ extension/          the extension itself; this folder is what ships
   popup.*           the popup
   background.js     address bar, right-click menu
 tests/              unit tests for lib/
+wiki/               source of the user documentation, published to the GitHub wiki
 tools/preview/    browser preview with a fake chrome API
 scripts/          check, build and icon rendering
 store/            Chrome Web Store listing text and images

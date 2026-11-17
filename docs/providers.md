@@ -6,7 +6,8 @@ Each tracker is one module in `extension/lib/providers/`. A provider is a plain 
 2. Add it to the list in `extension/lib/providers/index.js`.
 3. Add cases to `tests/core.test.mjs`: how its keys resolve, what `detect` trusts, what `clean` rejects.
 4. Add fake responses to `tools/preview/stub.js` so the UI can be exercised with `npm run preview`.
-5. Add the tracker to the tables in `README.md` and `PRIVACY.md`, and a line to `CHANGELOG.md`.
+5. Document it: a page in `wiki/` named after the tracker, rows in `wiki/Trackers.md`, `wiki/Home.md`, `wiki/_Sidebar.md` and `wiki/Privacy-and-permissions.md`, and a screenshot of its settings page (`scripts/wiki-shots.sh`).
+6. Add the tracker to the tables in `README.md` and `PRIVACY.md`, and a line to `CHANGELOG.md`.
 
 Test against the real service before opening the pull request and say in it what you tried.
 

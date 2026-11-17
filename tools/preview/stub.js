@@ -38,6 +38,7 @@
     sync: scene === 'setup' ? {} : scene === 'history' ? { trackers: TRACKERS, numbersTo: 'jira', useHistory: true } : scene === 'noproject' ? { trackers: [{ ...TRACKERS[0], project: '' }, TRACKERS[1]], numbersTo: 'jira' } : scene === 'single' || scene === 'signedout' ? { trackers: TRACKERS.slice(0, 1), numbersTo: 'jira' } : { trackers: TRACKERS, numbersTo: 'jira' },
     local: {
       welcomed: scene !== 'empty',
+      ...(params.get('list') ? { list: params.get('list') } : {}),
       tokens: { linear: 'lin_api_demo' },
       history: scene === 'empty' || scene === 'setup' || scene === 'history' ? [] : [
         hist('jira', 'WEB-412', `${SITE}/browse/WEB-412`, ISSUES[0], true, now - 50 * min),
@@ -146,5 +147,7 @@
     if (view) document.getElementById('openSettings').click();
     if (view === 'add') document.getElementById('addTracker').click();
     if (view === 'tracker') document.querySelectorAll('#trackerList .trow')[Number(params.get('n') || 0)]?.click();
+    const type = params.get('type'); // open the form for a new tracker of this type, from whichever screen lists them
+    if (type) [...document.querySelectorAll('#typeList .trow')].find((b) => b.textContent.toLowerCase().startsWith(type))?.click();
   }, 150));
 })();

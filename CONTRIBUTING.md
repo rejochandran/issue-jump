@@ -48,6 +48,7 @@ npm run check   # must pass
 
 - Add or update tests in `tests/` when you change anything in `extension/lib/`.
 - Add a line under `## [Unreleased]` in `CHANGELOG.md` for anything a user would notice.
+- Update the user documentation in `wiki/` in the same pull request, and run `npm run wiki:shots` if the popup looks different. See [wiki/README.md](wiki/README.md).
 - Test by hand in Chrome: light and dark theme, keyboard only, and a blank tab versus a normal page.
 - Keep the pull request to one topic. Smaller ones are reviewed faster.
 

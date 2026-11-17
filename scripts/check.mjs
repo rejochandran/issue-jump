@@ -61,8 +61,24 @@ for (const file of files.filter((f) => f.endsWith('.html'))) {
   if (/<script(?![^>]*\bsrc=)[^>]*>\s*\S/.test(source)) fail(`${file.replace(root, '')} has an inline script, which MV3 blocks`);
 }
 
+// Wiki source: every [[link]] must point at a page and every image must exist.
+const wiki = join(root, 'wiki');
+const pages = readdirSync(wiki).filter((f) => f.endsWith('.md') && f !== 'README.md');
+const titles = new Set(pages.map((f) => f.replace(/\.md$/, '').replaceAll('-', ' ').toLowerCase()));
+for (const page of pages) {
+  const source = readFileSync(join(wiki, page), 'utf8');
+  for (const [, inner] of source.matchAll(/\[\[([^\]]+)\]\]/g)) {
+    const target = inner.split('|').pop().trim();
+    if (!titles.has(target.toLowerCase())) fail(`wiki/${page} links to a page that does not exist: [[${inner}]]`);
+  }
+  for (const [, image] of source.matchAll(/\]\((images\/[^)\s]+)\)/g)) {
+    if (!existsSync(join(wiki, image))) fail(`wiki/${page} uses a missing image: ${image}`);
+  }
+}
+for (const required of ['Home.md', '_Sidebar.md']) if (!pages.includes(required)) fail(`wiki/${required} is missing`);
+
 if (errors.length) {
   console.error(errors.map((e) => `✗ ${e}`).join('\n'));
   process.exit(1);
 }
-console.log(`✓ manifest, versions and ${files.length} extension files look good (v${manifest.version})`);
+console.log(`✓ manifest, versions, ${files.length} extension files and ${pages.length} wiki pages look good (v${manifest.version})`);

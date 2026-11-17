@@ -1,0 +1,52 @@
+name: Wiki
+
+# Publishes wiki/ to the GitHub wiki. The wiki describes what is released,
+# so it follows main. Run it by hand to publish without a release.
+on:
+  push:
+    branches: [main]
+    paths: ['wiki/**', '.github/workflows/wiki.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: wiki
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The wiki's git repository only exists once a first page has been created on GitHub.
+      - name: Check out the wiki
+        id: wiki
+        continue-on-error: true
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}.wiki
+          path: .wiki
+
+      - name: Explain how to create the wiki
+        if: steps.wiki.outcome != 'success'
+        run: |
+          echo "::error::The wiki has no pages yet. Open https://github.com/${{ github.repository }}/wiki, click 'Create the first page', save it, then re-run this workflow."
+          exit 1
+
+      - name: Copy pages and publish
+        run: |
+          # Mirror wiki/ exactly: pages removed from the source are removed from the wiki.
+          rsync -a --delete --exclude .git --exclude README.md wiki/ .wiki/
+          cd .wiki
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Wiki is already up to date." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "Update from ${GITHUB_SHA::7}"
+          git push
+          echo "Published wiki from ${GITHUB_SHA::7}." >> "$GITHUB_STEP_SUMMARY"
