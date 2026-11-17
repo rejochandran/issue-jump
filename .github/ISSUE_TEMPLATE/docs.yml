@@ -1,0 +1,36 @@
+name: Documentation problem
+description: Something in the wiki or README is wrong, unclear or missing
+labels: [documentation]
+body:
+  - type: input
+    id: page
+    attributes:
+      label: Which page?
+      placeholder: "https://github.com/rejochandran/issue-jump/wiki/Linear"
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What is the problem?
+      options:
+        - It's wrong or out of date
+        - It's unclear or hard to follow
+        - Something is missing
+        - A screenshot doesn't match the extension
+        - A link is broken
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: What should it say?
+      description: Quote the part you mean, and say what you expected to find.
+    validations:
+      required: true
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Can you help?
+      options:
+        - label: I'd like to fix it myself (the pages live in the `wiki/` folder of the repository)

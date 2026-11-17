@@ -2,23 +2,48 @@ name: Bug report
 description: Something isn't working the way it should
 labels: [bug]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. The [troubleshooting page](https://github.com/rejochandran/issue-jump/wiki/Troubleshooting) covers the common problems; it is worth a look first.
+        Please leave out company names, private issue titles and API keys.
   - type: textarea
     id: what
     attributes:
       label: What happened?
-      description: What did you do, what did you expect, and what happened instead?
-      placeholder: "I typed ABC-123 and pressed Enter. I expected the issue to open in a new tab, but..."
+      description: What you did, what you expected, and what happened instead.
+      placeholder: |
+        1. Opened the popup on a new tab
+        2. Typed 123 and pressed Enter
+        Expected ABC-123 to open in this tab. It opened a search instead.
     validations:
       required: true
   - type: input
     id: typed
     attributes:
       label: What did you type or paste?
-      description: The exact text, if the problem is about recognising an issue key. Change the project name if it is private.
+      description: The exact text, if the problem is about recognising an issue. Change private project names.
+      placeholder: "abc 123"
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where does it happen?
+      multiple: true
+      options:
+        - The popup
+        - The address bar (j + space)
+        - The right-click menu
+        - Settings or adding a tracker
+        - Previews, search or Assigned to me
+        - Recent issues
+        - Installing or updating
+    validations:
+      required: true
   - type: dropdown
     id: tracker
     attributes:
       label: Tracker
+      multiple: true
       options:
         - Jira Cloud
         - Jira Server / Data Center
@@ -35,7 +60,7 @@ body:
     attributes:
       label: Issue Jump version
       description: Shown at the bottom of the extension's settings.
-      placeholder: "1.0.0"
+      placeholder: "1.2.1"
     validations:
       required: true
   - type: input
@@ -46,7 +71,21 @@ body:
     validations:
       required: true
   - type: textarea
+    id: console
+    attributes:
+      label: Errors from the console
+      description: Right-click the popup, choose Inspect, open the Console tab and paste anything in red. Remove private names first.
+      render: text
+  - type: textarea
     id: extra
     attributes:
       label: Anything else?
-      description: Screenshots help. To see errors, right-click the popup and choose Inspect, then look at the Console tab.
+      description: Screenshots help. Blur anything private.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and this isn't a duplicate
+          required: true
+        - label: I'm on the latest version, or the problem is still there in it

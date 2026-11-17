@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const script = fileURLToPath(new URL('../scripts/check-pr.mjs', import.meta.url));
 const { version } = JSON.parse(readFileSync(new URL('../extension/manifest.json', import.meta.url), 'utf8'));
-const run = (env) => spawnSync(process.execPath, [script], { env: { ...process.env, PR_TITLE: '', PR_BODY: '', PR_BASE: 'dev', ...env }, encoding: 'utf8' });
+const run = (env) => spawnSync(process.execPath, [script], { env: { ...process.env, PR_TITLE: '', PR_BODY: '', PR_BASE: 'dev', PR_AUTHOR: '', ...env }, encoding: 'utf8' });
 
 const what = 'Adds a provider for YouTrack so that keys from it can be opened, previewed and searched like the other trackers. '.repeat(3);
 const how = 'Ran the unit and popup tests, then loaded the dev build in Chrome and opened several issues against a real YouTrack Cloud account. Self-hosted was not tried.';
@@ -34,6 +34,12 @@ test('a thin description fails, and main asks for more than dev', () => {
   const short = '## What does this change?\n\nKeeps the selected row in place when lookups finish and the list is drawn again.\n\n## How did you test it?\n\nAdded a popup test and tried it by hand in Chrome.\n\n- [x] Tests pass\n';
   assert.equal(run({ PR_TITLE: 'fix: keep selection on refresh', PR_BODY: short }).status, 0);
   assert.equal(run({ PR_TITLE: 'fix: keep selection on refresh', PR_BODY: short, PR_BASE: 'main' }).status, 1);
+});
+
+test('dependency updates are let through for dev, never for main', () => {
+  assert.equal(run({ PR_TITLE: 'chore: bump actions/checkout', PR_BODY: 'Bumps actions/checkout from 4 to 5.', PR_AUTHOR: 'dependabot[bot]' }).status, 0);
+  assert.equal(run({ PR_TITLE: 'chore: bump actions/checkout', PR_BODY: 'Bumps actions/checkout from 4 to 5.', PR_AUTHOR: 'dependabot[bot]', PR_BASE: 'main' }).status, 1);
+  assert.equal(run({ PR_TITLE: 'chore: bump actions/checkout', PR_BODY: 'Bumps actions/checkout from 4 to 5.', PR_AUTHOR: 'someone' }).status, 1);
 });
 
 test('a release must match the manifest version and have its checklist ticked', () => {

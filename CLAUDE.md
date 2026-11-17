@@ -78,9 +78,13 @@ Write the wiki for someone who has never seen the extension: what it does, the e
 
 ## Branches and releases
 
-- Work on `dev` (default branch). `main` holds released code only and changes **only through a pull request from `dev`**. Direct pushes are refused for everyone, admins included; never try to bypass or relax the protection.
-- A pull request to `main` needs both required checks green: `check` (unit tests, popup tests, policy checks, build) and `description` (`scripts/check-pr.mjs`). Write a real description: under "What does this change?" say what users get, grouped like the changelog, and what deserves a close look; under "How did you test it?" say what was run, against which trackers, and what was not tested. Use `.github/PULL_REQUEST_TEMPLATE/release.md` for releases, title `Release X.Y.Z`, tick the checklist truthfully. Merge with a merge commit.
+Both `dev` and `main` are locked. Nothing is pushed to either directly, by anyone; never try to bypass or relax the protection.
+
+- **Every change starts on a feature branch** cut from `dev`: `feat/…`, `fix/…`, `docs/…`, `test/…`, `chore/…`, `ci/…`. Commit there, push the branch, and open a pull request to `dev`. Outside contributors do the same from a fork.
+- **Pull requests to `dev`** need both required checks green: `check` (unit tests, popup tests, policy checks, build) and `description` (`scripts/check-pr.mjs`). Squash-merge, then delete the branch. One topic per pull request.
+- **`main` changes only through a release pull request from `dev`**, with the same two checks. Use `.github/PULL_REQUEST_TEMPLATE/release.md`, title `Release X.Y.Z`, tick the checklist truthfully, merge with a merge commit.
+- **Write a real description** on every pull request: under "What does this change?" say what users or the code get and why, and what deserves a close look; under "How did you test it?" say what was run, against which trackers, and what was not tested.
 - User-visible changes get a line under `## [Unreleased]` in `CHANGELOG.md`.
 - The version lives in both `extension/manifest.json` and `package.json`; they must match.
-- Merging to `main` with a new version tags it, creates a GitHub release and publishes to the Chrome Web Store.
-- Commit subjects: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`. Do not add AI attribution or co-author trailers to commits or pull requests.
+- Merging to `main` with a new version tags it, creates a GitHub release and publishes to the Chrome Web Store. Release tags (`v*`) cannot be moved or deleted.
+- Commit subjects: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`, `ci:`. Do not add AI attribution or co-author trailers to commits or pull requests.
