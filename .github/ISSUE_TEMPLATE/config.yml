@@ -1,8 +1,11 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Vote on existing requests
-    url: https://github.com/rejochandran/issue-jump/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement%2C%22tracker+request%22+sort%3Areactions-%2B1-desc
-    about: See what others have asked for and add a 👍 to the ones you want.
+  - name: Suggest a feature or request a tracker
+    url: https://github.com/rejochandran/issue-jump/discussions/new?category=ideas
+    about: Ideas live in Discussions, where everyone can upvote them. The most upvoted are worked on first.
+  - name: Ask a question
+    url: https://github.com/rejochandran/issue-jump/discussions/new?category=q-a
+    about: Not sure how something works, or whether it's a bug? Ask here.
   - name: Security problem
     url: https://github.com/rejochandran/issue-jump/security/advisories/new
     about: Please report security issues privately, not in a public issue.

@@ -113,8 +113,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) to get involved and [docs/releasing.md](d
 
 ## Ideas and requests
 
-- **[Request a feature](https://github.com/rejochandran/issue-jump/issues/new?template=feature.yml)** or **[ask for another tracker](https://github.com/rejochandran/issue-jump/issues/new?template=tracker.yml)**.
-- **[Vote on open requests](https://github.com/rejochandran/issue-jump/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement%2C%22tracker+request%22+sort%3Areactions-%2B1-desc)** with a 👍. The most-wanted ones are worked on first.
+- **[Suggest a feature or request a tracker](https://github.com/rejochandran/issue-jump/discussions/new?category=ideas)** in Discussions.
+- **[Upvote existing ideas](https://github.com/rejochandran/issue-jump/discussions/categories/ideas?discussions_q=category%3AIdeas+sort%3Atop)**. The most upvoted are worked on first.
+- **[Ask a question](https://github.com/rejochandran/issue-jump/discussions/new?category=q-a)**.
 - **[Report a bug](https://github.com/rejochandran/issue-jump/issues/new?template=bug.yml)**.
 
 The same links are under **Feedback** in the extension's settings. You need a free GitHub account.

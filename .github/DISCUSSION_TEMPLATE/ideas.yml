@@ -1,0 +1,41 @@
+title: ""
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the idea. Before posting, search the [existing ideas](https://github.com/rejochandran/issue-jump/discussions/categories/ideas?discussions_q=category%3AIdeas+sort%3Atop) and upvote yours if it's already there. The most upvoted ideas are worked on first.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of idea is it?
+      options:
+        - A new feature or improvement
+        - Support for another issue tracker
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: Describe the situation, not just the solution. What slows you down today?
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would help?
+  - type: textarea
+    id: tracker
+    attributes:
+      label: For a tracker request
+      description: |
+        Which tracker, what an issue link looks like (replace private names), how issues are written (ABC-123, #123, ...), and a link to its API documentation if you know it.
+        Note that any tracker already works as a Custom tracker (Settings → Add a tracker → Custom) if you only need to jump to issues.
+      placeholder: "YouTrack. https://example.youtrack.cloud/issue/ABC-123"
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Can you help?
+      options:
+        - label: I can test a build
+        - label: I'd like to work on this myself

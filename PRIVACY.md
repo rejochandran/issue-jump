@@ -48,4 +48,4 @@ Changes to this policy are recorded in this file's history and in the [changelog
 
 ## Contact
 
-Questions or concerns: [open an issue](https://github.com/rejochandran/issue-jump/issues).
+Questions or concerns: [ask in Discussions](https://github.com/rejochandran/issue-jump/discussions/new?category=q-a).
