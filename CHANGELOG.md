@@ -5,6 +5,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+### Fixed
+
+- A suggestion to add a tracker no longer hides the notice that you are signed out of one.
+
 ## [1.2.0] - 2026-11-17
 
 ### Added

@@ -504,7 +504,8 @@ async function checkSessions() {
   out.forEach((t) => state.signedOut.add(t.id));
   if (!mineable().length) state.list = 'recent';
   render();
-  if (!state.notice) {
+  // Being signed out matters more than a suggestion to add another tracker.
+  if (!state.notice || state.notice.id === 'found') {
     const t = out[0];
     setNotice(t.token
       ? { id: 'edit', tracker: t.id, text: `${titleOf(t)} didn’t accept the saved key.`, action: 'Fix' }

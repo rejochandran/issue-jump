@@ -42,11 +42,14 @@ For UI work, `npm run preview` serves the popup at `http://localhost:8765/` with
 ## Before you open a pull request
 
 ```bash
-npm test        # must pass
-npm run check   # must pass
+npm test          # unit tests
+npm run test:ui   # popup tests in headless Chrome (needs Chrome installed)
+npm run check     # manifest, policy and documentation checks
 ```
 
-- Add or update tests in `tests/` when you change anything in `extension/lib/`.
+All three must pass; `npm run test:all` runs them together. CI runs the same on every pull request.
+
+- Add or update tests with every behaviour change: unit tests in `tests/*.test.mjs` for anything in `extension/lib/` or `background.js`, and a case in `tests/ui/cases.js` for anything visible in the popup. A bug fix should come with a test that failed before it.
 - Add a line under `## [Unreleased]` in `CHANGELOG.md` for anything a user would notice.
 - Update the user documentation in `wiki/` in the same pull request, and run `npm run wiki:shots` if the popup looks different. See [wiki/README.md](wiki/README.md).
 - Test by hand in Chrome: light and dark theme, keyboard only, and a blank tab versus a normal page.

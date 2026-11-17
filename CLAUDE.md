@@ -6,7 +6,10 @@ Plain ES modules, HTML and CSS. No dependencies, no bundler, no build step: `ext
 ## Commands
 
 ```bash
-npm test            # unit tests (node:test) for extension/lib/
+npm test            # unit tests (node:test): core, providers, storage, service worker
+npm run test:ui     # the popup driven in headless Chrome against the preview stub
+npm run test:all    # both, plus check
+npm run coverage    # unit tests with a coverage report
 npm run check       # manifest, version sync, permission and store-policy checks
 npm run preview     # popup in a browser tab with a fake chrome API and fake tracker data (port 8765)
 npm run build       # dist/issue-jump-<version>.zip      (--dev variant: npm run build:dev)
@@ -15,7 +18,17 @@ npm run screenshots # regenerate store images (needs Chrome and rsvg-convert)
 npm run wiki:shots  # regenerate wiki screenshots in wiki/images (needs Chrome and Pillow)
 ```
 
-Run `npm test && npm run check` before finishing any change.
+Run `npm run test:all` before finishing any change.
+
+## Tests
+
+- `tests/core.test.mjs`: pure logic. Routing typed text to trackers, detection from tabs, migration, history import.
+- `tests/providers.test.mjs`: each provider's network functions against canned responses (`globalThis.fetch` is replaced).
+- `tests/storage.test.mjs`: settings, tokens and history against an in-memory `chrome.storage`.
+- `tests/background.test.mjs`: the service worker's listeners, with a recording `chrome` stand-in.
+- `tests/ui/cases.js`: the real popup in an iframe with `tools/preview/stub.js`, run by `tests/ui/run.mjs` in headless Chrome. Watch them at `/__tests/index.html` under `npm run preview`.
+
+Every behaviour change needs a test at the lowest level that can see it: pure logic in `core`, API shapes in `providers`, anything on screen in `tests/ui/cases.js`. New screens or states need a scene in the stub and a UI case. A bug fix starts with a test that fails. Never loosen the hostile-data case (`scene=hostile`): tracker text must stay text.
 
 ## Layout
 

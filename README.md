@@ -93,6 +93,7 @@ No build step and no dependencies. You need Node 20 or newer for the tooling.
 
 ```bash
 npm test          # unit tests
+npm run test:ui   # popup tests in headless Chrome
 npm run check     # manifest, version and store-policy checks
 npm run preview   # the popup in a normal browser tab, with fake data
 npm run build     # dist/issue-jump-<version>.zip
@@ -106,7 +107,7 @@ extension/          the extension itself; this folder is what ships
   lib/providers/    one file per tracker
   popup.*           the popup
   background.js     address bar, right-click menu
-tests/              unit tests for lib/
+tests/              unit tests, and tests/ui/ for popup tests run in headless Chrome
 wiki/               source of the user documentation, published to the GitHub wiki
 tools/preview/    browser preview with a fake chrome API
 scripts/          check, build and icon rendering

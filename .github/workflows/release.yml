@@ -43,6 +43,7 @@ jobs:
           fi
 
       - run: npm test
+      - run: npm run test:ui
       - run: npm run check
       - run: npm run build
 

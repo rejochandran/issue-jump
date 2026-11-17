@@ -9,8 +9,8 @@
 ## Checklist
 
 - [ ] This pull request targets `dev`
-- [ ] `npm test` and `npm run check` pass
-- [ ] Tests added or updated for changes to `extension/lib/`
+- [ ] `npm run test:all` passes (unit tests, popup tests, checks)
+- [ ] Tests added or updated: unit tests for logic, a case in `tests/ui/cases.js` for anything visible
 - [ ] `CHANGELOG.md` has a line under "Unreleased" for anything users will notice
 - [ ] The wiki page in `wiki/` is updated, with fresh screenshots if the popup changed
 - [ ] Checked in light and dark theme, and with the keyboard only (UI changes)

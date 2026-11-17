@@ -16,6 +16,9 @@
     ['WEB-405', 'Checkout button overlaps footer on small screens', 'To Do', 'blue-gray', 'Bug', 'Daniel Reyes'],
     ['WEB-420', 'Promo codes: support percentage discounts', 'To Do', 'blue-gray', 'Story', 'Priya Nair'],
   ].map(([key, summary, status, statusColor, type, assignee]) => ({ key, summary, status, statusColor, type, assignee }));
+  // An issue whose title is markup. It must always be shown as text, never run.
+  const HOSTILE = '<img src=x onerror="window.__xss=1"><b>bold</b>';
+  if (scene === 'hostile') ISSUES.push({ key: 'WEB-666', summary: HOSTILE, status: '<i>Open</i>', statusColor: '"><script>window.__xss=1</script>', type: 'Bug', assignee: 'Maya Okafor' });
   const PROJECTS = [{ key: 'WEB', name: 'Web App' }, { key: 'OPS', name: 'Operations' }, { key: 'MOB', name: 'Mobile' }];
 
   const TRACKERS = [
@@ -35,12 +38,12 @@
   const hist = (tracker, key, url, issue, pinned, ts) => ({ tracker, key, url, summary: issue.summary || issue.title, status: issue.status || '', statusColor: issue.statusColor || '', pinned, ts });
 
   const store = {
-    sync: scene === 'setup' ? {} : scene === 'history' ? { trackers: TRACKERS, numbersTo: 'jira', useHistory: true } : scene === 'noproject' ? { trackers: [{ ...TRACKERS[0], project: '' }, TRACKERS[1]], numbersTo: 'jira' } : scene === 'single' || scene === 'signedout' ? { trackers: TRACKERS.slice(0, 1), numbersTo: 'jira' } : { trackers: TRACKERS, numbersTo: 'jira' },
+    sync: scene === 'setup' || scene === 'fresh' ? {} : scene === 'history' ? { trackers: TRACKERS, numbersTo: 'jira', useHistory: true } : scene === 'noproject' ? { trackers: [{ ...TRACKERS[0], project: '' }, TRACKERS[1]], numbersTo: 'jira' } : scene === 'single' || scene === 'signedout' ? { trackers: TRACKERS.slice(0, 1), numbersTo: 'jira' } : { trackers: TRACKERS, numbersTo: 'jira' },
     local: {
-      welcomed: scene !== 'empty',
+      welcomed: scene !== 'empty' && scene !== 'fresh',
       ...(params.get('list') ? { list: params.get('list') } : {}),
       tokens: { linear: 'lin_api_demo' },
-      history: scene === 'empty' || scene === 'setup' || scene === 'history' ? [] : [
+      history: ['empty', 'setup', 'history', 'fresh'].includes(scene) ? [] : scene === 'hostile' ? [hist('jira', 'WEB-666', `${SITE}/browse/WEB-666`, { summary: HOSTILE, status: '<i>Open</i>' }, false, now - min)] : [
         hist('jira', 'WEB-412', `${SITE}/browse/WEB-412`, ISSUES[0], true, now - 50 * min),
         ...(scene === 'default' ? [
           hist('github', 'acme/web#198', 'https://github.com/acme/web/issues/198', { title: GH[1].title, status: 'Merged', statusColor: 'green' }, false, now - 2 * min),
